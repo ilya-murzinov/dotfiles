@@ -31,6 +31,8 @@ values."
      markdown
      scala
      java
+     haskell
+     html
      ;;org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -274,8 +276,11 @@ you should place your code here."
   (global-set-key (kbd "<f8>") 'neotree-toggle)
   (global-set-key (kbd "<f6>") 'dot-spacemacs)
   (global-set-key (kbd "C-e") 'ibuffer)
+  (global-set-key (kbd "C-S-<down>") 'move-text-down)
+  (global-set-key (kbd "C-S-<up>") 'move-text-up)
   (global-set-key (kbd "C-n") 'projectile-find-file)
   (global-set-key (kbd "C-d") 'duplicate-line))
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
