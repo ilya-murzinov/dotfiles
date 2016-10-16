@@ -45,7 +45,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(syntax-subword)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -100,17 +100,14 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(suscolors
-                         spacemacs-dark
-                         solarized-dark
-                         monokai
-                         zenburn)
+   dotspacemacs-themes '(zenburn
+                         darcula)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+   dotspacemacs-default-font '("Hack"
+                               :size 35
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -260,6 +257,15 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (next-line 1)
   (yank))
 
+(defun forward-word-stop-eol (arg)
+  (interactive "p")
+  (let ((start (point)))
+    (save-restriction
+      (save-excursion
+        (move-end-of-line 1)
+        (narrow-to-region start (point)))
+      (forward-word arg))))
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -268,10 +274,25 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (setq-default line-spacing 10)
+
+  (setq-default cursor-type '(hbar . 5))
+  (setq-default evil-emacs-state-cursor '(hbar . 5))
+
+  (global-syntax-subword-mode)
+  (setq syntax-subword-skip-spaces t)
+
+  (setq frame-title-format
+        (list (format "%s %%S: %%j " (system-name))
+              '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+
+  (setq-default dotspacemacs-smooth-scrolling nil)
   (global-linum-mode t)
   (global-subword-mode t)
   (projectile-global-mode t)
   (setq neo-theme 'nerd)
+
+  (global-unset-key (kbd "C-q"))
 
   (global-set-key (kbd "<f8>") 'neotree-toggle)
   (global-set-key (kbd "<f6>") 'dot-spacemacs)
@@ -279,8 +300,11 @@ you should place your code here."
   (global-set-key (kbd "C-S-<down>") 'move-text-down)
   (global-set-key (kbd "C-S-<up>") 'move-text-up)
   (global-set-key (kbd "C-n") 'projectile-find-file)
+  (global-set-key (kbd "C-<tab>") 'other-window)
+  (global-set-key (kbd "C-q <down>") 'split-window-below)
+  (global-set-key (kbd "C-q <right>") 'split-window-right)
+  (global-set-key (kbd "C-q C-w") 'delete-window)
   (global-set-key (kbd "C-d") 'duplicate-line))
-
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
