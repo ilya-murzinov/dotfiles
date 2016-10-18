@@ -40,6 +40,7 @@ values."
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -109,8 +110,7 @@ values."
    dotspacemacs-default-font '("Hack"
                                :size 35
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+                               :width normal)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -257,15 +257,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (next-line 1)
   (yank))
 
-(defun forward-word-stop-eol (arg)
-  (interactive "p")
-  (let ((start (point)))
-    (save-restriction
-      (save-excursion
-        (move-end-of-line 1)
-        (narrow-to-region start (point)))
-      (forward-word arg))))
-
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -274,13 +265,12 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (setq-default line-spacing 10)
+  (blink-cursor-mode 't)
 
-  (setq-default cursor-type '(hbar . 5))
-  (setq-default evil-emacs-state-cursor '(hbar . 5))
+  (global-flycheck-mode)
 
   (global-syntax-subword-mode)
-  (setq syntax-subword-skip-spaces t)
+  (setq syntax-subword-skip-spaces nil)
 
   (setq frame-title-format
         (list (format "%s %%S: %%j " (system-name))
