@@ -283,6 +283,10 @@ you should place your code here."
   (setq neo-theme 'nerd)
 
   (global-unset-key (kbd "C-q"))
+  (global-unset-key (kbd "C-s"))
+  (global-unset-key (kbd "C-S-r"))
+
+  (global-set-key (kbd "C-s") 'save-buffer)
 
   (global-set-key (kbd "<f8>") 'neotree-toggle)
   (global-set-key (kbd "<f6>") 'dot-spacemacs)
@@ -290,6 +294,13 @@ you should place your code here."
   (global-set-key (kbd "C-S-<down>") 'move-text-down)
   (global-set-key (kbd "C-S-<up>") 'move-text-up)
   (global-set-key (kbd "C-n") 'projectile-find-file)
+
+  (global-set-key (kbd "C-f") 'isearch-forward)
+  (global-set-key (kbd "C-S-f") 'helm-projectile-grep)
+  (global-set-key (kbd "C-S-r") 'projectile-replace)
+  (define-key isearch-mode-map (kbd "<down>") 'isearch-repeat-forward)
+  (define-key isearch-mode-map (kbd "<up>") 'isearch-repeat-backward)
+
   (global-set-key (kbd "C-<tab>") 'other-window)
   (global-set-key (kbd "C-q <down>") 'split-window-below)
   (global-set-key (kbd "C-q <right>") 'split-window-right)
