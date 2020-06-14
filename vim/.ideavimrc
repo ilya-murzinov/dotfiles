@@ -1,0 +1,21 @@
+source ~/.vimrc
+
+nnoremap <Leader>ff :action GotoFile<CR>
+nnoremap <Leader>fr :action RecentFiles<CR>
+
+nnoremap <Leader>or :action RecentProjectListGroup<CR>
+nnoremap <Leader>pc :action CloseProject<CR>
+nnoremap <Leader><Leader>l :action NextProjectWindow<CR>
+nnoremap <Leader><Leader>h :action PreviousProjectWindow<CR>
+
+nnoremap <Leader>u :action ShowUsages<CR>
+nnoremap <Leader>rr :action RenameElement<CR>
+nnoremap gi :action GotoImplementation<CR>
+
+nnoremap <Leader>ga :action Annotate<CR>
+nnoremap <Leader>gb :action Git.Branches<CR>
+nnoremap <Leader>gp :action Vcs.Push<CR>
+nnoremap <Leader>gf :action Vcs.UpdateProject<CR>
+nnoremap <Leader>gc :action ActivateCommitToolWindow<CR>
+nnoremap <Leader>gr :action ChangesView.Revert<CR>
+
