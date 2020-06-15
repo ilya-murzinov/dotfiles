@@ -18,4 +18,3 @@ nnoremap <Leader>gp :action Vcs.Push<CR>
 nnoremap <Leader>gf :action Vcs.UpdateProject<CR>
 nnoremap <Leader>gc :action ActivateCommitToolWindow<CR>
 nnoremap <Leader>gr :action ChangesView.Revert<CR>
-

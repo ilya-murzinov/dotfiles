@@ -43,7 +43,7 @@ Plug 'mbbill/undotree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'gruvbox-community/gruvbox'
-Plug'udalov/kotlin-vim'
+Plug 'udalov/kotlin-vim'
 
 call plug#end()
 
@@ -59,3 +59,5 @@ nnoremap <leader><leader>r :reg "" "a "s "d<CR>
 
 nnoremap <C-p> :GFiles<CR>
 nnoremap <Leader>pf :Files<CR>
+
+nnoremap <Leader>n /,<CR>lr<CR>
