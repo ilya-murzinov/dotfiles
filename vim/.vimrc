@@ -43,7 +43,10 @@ Plug 'mbbill/undotree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'gruvbox-community/gruvbox'
+Plug 'arcticicestudio/nord-vim'
 Plug 'udalov/kotlin-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -51,13 +54,26 @@ let g:gruvbox_contrast_dark = 'soft'
 colorscheme gruvbox
 set background=dark
 
+set wildmode=longest,list,full
+set splitbelow splitright
+
 nnoremap x "_x
 nnoremap <leader>a "a
 nnoremap <leader>s "s
 nnoremap <leader>d "d
 nnoremap <leader><leader>r :reg "" "a "s "d<CR>
 
-nnoremap <C-p> :GFiles<CR>
-nnoremap <Leader>pf :Files<CR>
+nnoremap <leader>ff :GFiles<CR>
 
 nnoremap <Leader>n /,<CR>lr<CR>
+ 
+nnoremap <leader>h <C-w>h
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
+
+nmap <C-v> "*P
+vmap <C-c> "*y
+imap <C-v> <C-R>*
+
+nnoremap <leader>pv :wincmd v<bar> :wincmd r<bar> :Ex<bar> :vertical resize 30<CR>
