@@ -72,8 +72,13 @@ nnoremap <leader>j <C-w>j
 nnoremap <leader>k <C-w>k
 nnoremap <leader>l <C-w>l
 
-nmap <C-v> "*P
-vmap <C-c> "*y
-imap <C-v> <C-R>*
+xnoremap <Tab> >gv
+xnoremap <S-Tab> <gv
+
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+
+" nmap <C-v> "*P
+" vmap <C-c> "*y
+" imap <C-v> <C-R>*
 
 nnoremap <leader>pv :wincmd v<bar> :wincmd r<bar> :Ex<bar> :vertical resize 30<CR>
