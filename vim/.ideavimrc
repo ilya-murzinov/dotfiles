@@ -10,6 +10,8 @@ nnoremap <Leader><Leader>h :action PreviousProjectWindow<CR>
 
 nnoremap <Leader>u :action ShowUsages<CR>
 nnoremap <Leader>rr :action RenameElement<CR>
+vnoremap <Leader>rm :action ExtractMethod<CR>
+vnoremap <Leader>rv :action ExtractVariable<CR>
 nnoremap gi :action GotoImplementation<CR>
 
 nnoremap <Leader>ga :action Annotate<CR>
@@ -18,3 +20,7 @@ nnoremap <Leader>gp :action Vcs.Push<CR>
 nnoremap <Leader>gf :action Vcs.UpdateProject<CR>
 nnoremap <Leader>gc :action ActivateCommitToolWindow<CR>
 nnoremap <Leader>gr :action ChangesView.Revert<CR>
+
+nnoremap <Leader>if :action IntroduceField<CR>
+
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
