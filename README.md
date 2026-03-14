@@ -11,7 +11,7 @@ Configs and cheatsheets. Symlink into `$HOME` (or use [GNU Stow](https://www.gnu
 | `karabiner/` | Karabiner-Elements config (TypeScript source) | `make karabiner` — builds to `~/.config/karabiner/karabiner.json` |
 | `vial/` | Vial keymaps (Corne / Corne Mini .vil) — load in [Vial](https://get.vial.today/) when flashing | Open the .vil file in Vial |
 | `zmk/` | ZMK firmware config (Totem) — git subtree from zmk-config-totem-stable | `make zmk-pull` / `make zmk-push` to sync |
-| `keymap-viz/` | Keymap visualizer (ZMK → SVG via [keymap-drawer](https://github.com/caksoylar/keymap-drawer)) | `make keymap-viz` then open `keymap-viz/index.html` |
+| `keymap-viz/` | Keymap visualizer (ZMK → SVG via [keymap-drawer](https://github.com/caksoylar/keymap-drawer)) | `make keymap-viz` — picture in `keymap-viz/README.md` |
 
 ## Install (symlink)
 
@@ -28,4 +28,4 @@ Links into `$(HOME)` by default. Override with `make install DEST=/other/home`. 
 
 **ZMK (keyboard firmware):** The `zmk/` directory is a git subtree of [zmk-config-totem-stable](https://github.com/ilya-murzinov/zmk-config-totem-stable). First time (or on a fresh clone without zmk): commit any local changes, then run `make zmk-add`. After that use `make zmk-pull` to pull updates and `make zmk-push` to push local zmk changes.
 
-**Keymap visualizer:** Renders the ZMK Totem keymap as SVG. Requires [keymap-drawer](https://github.com/caksoylar/keymap-drawer) (`pipx install keymap-drawer`) and the `zmk/` subtree. Run `make keymap-viz` to generate `keymap-viz/totem.svg`, then open `keymap-viz/index.html` in a browser. `make keymap-viz-open` builds and opens it.
+**Keymap visualizer:** Renders the ZMK Totem keymap as SVG. Run `make keymap-viz` (installs pipx + keymap-drawer if needed). The layout picture is in `keymap-viz/README.md`; commit `keymap-viz/totem.svg` to have it show there.
