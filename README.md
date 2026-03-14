@@ -4,14 +4,14 @@ Configs and cheatsheets. Symlink into `$HOME` (or use [GNU Stow](https://www.gnu
 
 ## Layout
 
-| Dir | Contents | Install |
-|-----|----------|---------|
-| `vim/` | .vimrc, .ideavimrc | symlink via `make install` |
-| `tmux/` | .tmux.conf, cheatsheet.md | symlink via `make install` |
-| `karabiner/` | Karabiner-Elements config (TypeScript source) | `make karabiner` — builds to `~/.config/karabiner/karabiner.json` |
-| `vial/` | Vial keymaps (Corne / Corne Mini .vil) — load in [Vial](https://get.vial.today/) when flashing | Open the .vil file in Vial |
-| `zmk/` | ZMK firmware config (Totem) — git subtree from zmk-config-totem-stable | `make zmk-pull` / `make zmk-push` to sync |
-| `keymap-viz/` | Keymap visualizer (ZMK → SVG via [keymap-drawer](https://github.com/caksoylar/keymap-drawer)) | `make keymap-viz` — picture in `keymap-viz/README.md` |
+| Dir           | Contents                                                                                       | Install                                                           |
+| ------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `vim/`        | .vimrc, .ideavimrc                                                                             | symlink via `make install`                                        |
+| `tmux/`       | .tmux.conf, cheatsheet.md                                                                      | symlink via `make install`                                        |
+| `karabiner/`  | Karabiner-Elements config (TypeScript source)                                                  | `make karabiner` — builds to `~/.config/karabiner/karabiner.json` |
+| `vial/`       | Vial keymaps (Corne / Corne Mini .vil) — load in [Vial](https://get.vial.today/) when flashing | Open the .vil file in Vial                                        |
+| `zmk/`        | ZMK firmware config (Totem) — git subtree from zmk-config-totem-stable                         | `make zmk-pull` / `make zmk-push` to sync                         |
+| `keymap-viz/` | Keymap visualizer (ZMK → SVG via [keymap-drawer](https://github.com/caksoylar/keymap-drawer))  | `make keymap-viz` — picture in `keymap-viz/README.md`             |
 
 ## Install (symlink)
 
