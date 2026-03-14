@@ -98,6 +98,4 @@ writeToProfile(
       .tappingTerm(300)
       .build()
   ),
-],
-  { 'basic.simultaneous_threshold_milliseconds': 50 }
-)
+])
