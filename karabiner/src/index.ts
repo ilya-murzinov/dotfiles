@@ -35,25 +35,28 @@ writeToProfile(
     mapSimultaneous(['k', 'l'], { key_up_when: 'any' }).to('right_arrow', 'option'),
   ]),
 
-  rule('Nav Layer').condition(builtIn).manipulators([
-    map('spacebar')
-       .toIfAlone('spacebar')
-      .to(toSetVar('nav_layer', 1))
-      .toAfterKeyUp(toSetVar('nav_layer', 0)),
-    map('h').condition(navActive).to('left_arrow'),
-    map('j').condition(navActive).to('down_arrow'),
-    map('k').condition(navActive).to('up_arrow'),
-    map('l').condition(navActive).to('right_arrow'),
-    map('u').condition(navActive).to('page_down'),
-    map('i').condition(navActive).to('page_up'),
-    map('s').condition(navActive).to('up_arrow', 'control'),
-    map('d').condition(navActive).to('left_arrow', 'control'),
-    map('f').condition(navActive).to('right_arrow', 'control'),
-    map('c').condition(navActive).to('open_bracket', 'command'),
-    map('v').condition(navActive).to('close_bracket', 'command'),
-    map('m').condition(navActive).to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
-    map(',').condition(navActive).to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
-  ]),
+  rule('Nav Layer')
+    .condition(builtIn)
+    .tappingTerm(300)
+    .manipulators([
+      map('spacebar')
+         .toIfAlone('spacebar')
+        .to(toSetVar('nav_layer', 1))
+        .toAfterKeyUp(toSetVar('nav_layer', 0)),
+      map('h').condition(navActive).to('left_arrow'),
+      map('j').condition(navActive).to('down_arrow'),
+      map('k').condition(navActive).to('up_arrow'),
+      map('l').condition(navActive).to('right_arrow'),
+      map('u').condition(navActive).to('page_down'),
+      map('i').condition(navActive).to('page_up'),
+      map('s').condition(navActive).to('up_arrow', 'control'),
+      map('d').condition(navActive).to('left_arrow', 'control'),
+      map('f').condition(navActive).to('right_arrow', 'control'),
+      map('c').condition(navActive).to('open_bracket', 'command'),
+      map('v').condition(navActive).to('close_bracket', 'command'),
+      map('m').condition(navActive).to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
+      map(',').condition(navActive).to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
+    ]),
 
   // Mouse layer: d+f together (matches Vial combo LALT_T(D)+LGUI_T(F) -> MO(5))
   rule('Mouse layer').condition(builtIn).manipulators([
@@ -93,9 +96,9 @@ writeToProfile(
         ["j", "right_command"],
         ["k", "right_option"],
         ["l", "right_control"],
-      ])
-    )
+      ]))
       .holdTapStrategy("permissive-hold")
+      .tappingTerm(300)
       .build()
   ),
 ],
