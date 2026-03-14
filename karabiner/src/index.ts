@@ -8,7 +8,7 @@ import {
   toSetVar,
   writeToProfile,
 } from 'karabiner.ts'
-import { capsWord, hrm } from "karabiner.ts-greg-mods";
+import { capsWord, hrm, holdTapLayer } from "karabiner.ts-greg-mods";
 
 const builtIn = ifDevice({ is_built_in_keyboard: true });
 const navActive = ifVar('nav_layer', 1);
@@ -35,30 +35,25 @@ writeToProfile(
     mapSimultaneous(['k', 'l'], { key_up_when: 'any' }).to('right_arrow', 'option'),
   ]),
 
-  rule('Nav Layer')
-    .condition(builtIn)
-    .manipulators([
-      map('spacebar')
-         .toIfAlone('spacebar')
-        .to(toSetVar('nav_layer', 1))
-        .toAfterKeyUp(toSetVar('nav_layer', 0)),
-      map('h').condition(navActive).to('left_arrow'),
-      map('j').condition(navActive).to('down_arrow'),
-      map('k').condition(navActive).to('up_arrow'),
-      map('l').condition(navActive).to('right_arrow'),
-      map('u').condition(navActive).to('page_down'),
-      map('i').condition(navActive).to('page_up'),
-      map('s').condition(navActive).to('up_arrow', 'control'),
-      map('d').condition(navActive).to('left_arrow', 'control'),
-      map('f').condition(navActive).to('right_arrow', 'control'),
-      map('c').condition(navActive).to('open_bracket', 'command'),
-      map('v').condition(navActive).to('close_bracket', 'command'),
-      map('m').condition(navActive).to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
-      map(',').condition(navActive).to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
-      ])
-    .holdTapStrategy("permissive-hold")
-    .tappingTerm(300)
-    .build(),
+  holdTapLayer('spacebar')
+    .permissiveHoldManipulators(
+      map('h').to('left_arrow'),
+      map('j').to('down_arrow'),
+      map('k').to('up_arrow'),
+      map('l').to('right_arrow'),
+      map('u').to('page_down'),
+      map('i').to('page_up'),
+      map('s').to('up_arrow', 'control'),
+      map('d').to('left_arrow', 'control'),
+      map('f').to('right_arrow', 'control'),
+      map('c').to('open_bracket', 'command'),
+      map('v').to('close_bracket', 'command'),
+      map('m').to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
+      map(',').to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
+  )
+  .tappingTerm(300)
+  .description("Nav layer")
+  .build(),
 
   // Mouse layer: d+f together (matches Vial combo LALT_T(D)+LGUI_T(F) -> MO(5))
   rule('Mouse layer').condition(builtIn).manipulators([
