@@ -37,7 +37,6 @@ writeToProfile(
 
   rule('Nav Layer')
     .condition(builtIn)
-    .tappingTerm(300)
     .manipulators([
       map('spacebar')
          .toIfAlone('spacebar')
@@ -56,7 +55,10 @@ writeToProfile(
       map('v').condition(navActive).to('close_bracket', 'command'),
       map('m').condition(navActive).to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
       map(',').condition(navActive).to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
-    ]),
+      ])
+    .holdTapStrategy("permissive-hold")
+    .tappingTerm(300)
+    .build(),
 
   // Mouse layer: d+f together (matches Vial combo LALT_T(D)+LGUI_T(F) -> MO(5))
   rule('Mouse layer').condition(builtIn).manipulators([
