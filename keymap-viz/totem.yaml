@@ -1,266 +1,178 @@
-layout: { zmk_keyboard: totem }
+layout: {zmk_keyboard: totem}
 layers:
   base:
-    - [Q, W, E, R, T, Y, U, I, O, P]
-    - - { t: A, h: LEFT SHIFT }
-      - { t: S, h: LCTRL }
-      - { t: D, h: LEFT ALT }
-      - { t: F, h: LEFT GUI }
-      - G
-      - H
-      - { t: J, h: LEFT GUI }
-      - { t: K, h: RIGHT ALT }
-      - { t: L, h: RCTRL }
-      - { t: ;, h: RIGHT SHIFT }
-    - ["", Z, X, C, V, B, N, M, ",", .]
-    - - { t: "&apos_td", s: '"' }
-      - ""
-      - ""
-      - nav
-      - { t: SPACE, h: sym_add }
-      - { t: SPACE, h: sym }
-      - rus
-      - media
+  - [Q, W, E, R, T, Y, U, I, O, P]
+  - - {t: A, h: LEFT SHIFT}
+    - {t: S, h: LCTRL}
+    - {t: D, h: LEFT ALT}
+    - {t: F, h: LEFT GUI}
+    - G
+    - H
+    - {t: J, h: LEFT GUI}
+    - {t: K, h: RIGHT ALT}
+    - {t: L, h: RCTRL}
+    - {t: ;, h: RIGHT SHIFT}
+  - ['', Z, X, C, V, B, N, M, ',', .]
+  - - {t: '&apos_td', s: '"'}
+    - ''
+    - ''
+    - nav
+    - {t: SPACE, h: sym_add}
+    - {t: SPACE, h: sym}
+    - rus
+    - media
   rus:
-    - - { t: ▽, type: trans }
-      - Sft+7
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - "`"
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - "["
-    - - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - "'"
-    - - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - "]"
-      - Sft+/
-      - /
-    - - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - { type: held }
-      - { t: ▽, type: trans }
+  - - {t: ▽, type: trans}
+    - Sft+7
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - '`'
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - '['
+  - - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - ''''
+  - - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - ']'
+    - Sft+/
+    - /
+  - - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {type: held}
+    - {t: ▽, type: trans}
   nav:
-    - [Gui+1, Gui+2, Gui+3, Gui+4, Gui+5, "", PAGE DOWN, PAGE UP, "", ""]
-    - [
-        LEFT SHIFT,
-        Ctl+UP ARROW,
-        Ctl+LEFT ARROW,
-        Ctl+RIGHT,
-        "",
-        LEFT,
-        DOWN,
-        UP,
-        RIGHT,
-        "",
-      ]
-    - ["", "", "", "Gui+[", "Gui+]", "", "", "Gui+Sft+[", "Gui+Sft+]", ""]
-    - - ""
-      - ""
-      - ""
-      - { type: held }
-      - ""
-      - ""
-      - ""
-      - ""
+  - [Gui+1, Gui+2, Gui+3, Gui+4, Gui+5, '', PAGE DOWN, PAGE UP, '', '']
+  - [LEFT SHIFT, Ctl+UP ARROW, Ctl+LEFT ARROW, Ctl+RIGHT, '', LEFT, DOWN, UP, RIGHT, '']
+  - ['', '', '', 'Gui+[', 'Gui+]', '', '', 'Gui+Sft+[', 'Gui+Sft+]', '']
+  - - ''
+    - ''
+    - ''
+    - {type: held}
+    - ''
+    - ''
+    - ''
+    - ''
   sym:
-    - ["!", "?", "@", "#", $, "&tilde_td", "7", "8", "9", )]
-    - [
-        "&minus_td",
-        "&plus_td",
-        "&div_td",
-        "&mult_td",
-        "&eq_td",
-        "&grave_td",
-        "4",
-        "5",
-        "6",
-        "&paren_td",
-      ]
-    - ["", _, "%", \, "&amp_td", "&pipe_td", "0", "1", "2", "3"]
-    - - /
-      - ""
-      - ""
-      - ""
-      - ""
-      - { t: SPACE, h: mouse, type: held }
-      - macros
-      - ""
+  - ['!', '?', '@', '#', $, '&tilde_td', '7', '8', '9', )]
+  - ['&minus_td', '&plus_td', '&div_td', '&mult_td', '&eq_td', '&grave_td', '4', '5', '6', '&paren_td']
+  - ['', _, '%', \, '&amp_td', '&pipe_td', '0', '1', '2', '3']
+  - - /
+    - ''
+    - ''
+    - ''
+    - ''
+    - {t: SPACE, h: mouse, type: held}
+    - macros
+    - ''
   sym_add:
-    - ["!", "?", "@", "#", $, ^, "", "", "", ""]
-    - [
-        "&minus_td",
-        "&plus_td",
-        "&div_td",
-        "&mult_td",
-        "&eq_td",
-        "",
-        "&bracket_td",
-        "]",
-        "",
-        "",
-      ]
-    - ["", _, "%", \, "&amp_td", "&pipe_td", "", "&curly_td", "}", ""]
-    - - ""
-      - ""
-      - ""
-      - ""
-      - { t: SPACE, h: sym_add, type: held }
-      - ""
-      - macros
-      - ""
+  - ['!', '?', '@', '#', $, ^, '', '', '', '']
+  - ['&minus_td', '&plus_td', '&div_td', '&mult_td', '&eq_td', '', '&bracket_td', ']', '', '']
+  - ['', _, '%', \, '&amp_td', '&pipe_td', '', '&curly_td', '}', '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - {t: SPACE, h: sym_add, type: held}
+    - ''
+    - macros
+    - ''
   mouse:
-    - [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "&msc SCRL_RIGHT",
-        "&msc SCRL_UP",
-        "&msc SCRL_DOWN",
-        "&msc SCRL_LEFT",
-        "",
-      ]
-    - [
-        LEFT SHIFT,
-        "",
-        "",
-        "",
-        "",
-        "&mmv MOVE_LEFT",
-        "&mmv MOVE_DOWN",
-        "&mmv MOVE_UP",
-        "&mmv MOVE_RIGHT",
-        "",
-      ]
-    - ["", "", "", "", "", "", "", "Gui+Sft+[", "Gui+Sft+]", ""]
-    - - ""
-      - ""
-      - { t: ▽, type: trans }
-      - { t: ▽, type: trans }
-      - LEFT GUI
-      - { t: "&mkp MB1", type: held }
-      - "&mkp MB2"
-      - ""
+  - ['', '', '', '', '', '&msc SCRL_RIGHT', '&msc SCRL_UP', '&msc SCRL_DOWN', '&msc SCRL_LEFT', '']
+  - [LEFT SHIFT, '', '', '', '', '&mmv MOVE_LEFT', '&mmv MOVE_DOWN', '&mmv MOVE_UP', '&mmv MOVE_RIGHT', '']
+  - ['', '', '', '', '', '', '', 'Gui+Sft+[', 'Gui+Sft+]', '']
+  - - ''
+    - ''
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - LEFT GUI
+    - {t: '&mkp MB1', type: held}
+    - '&mkp MB2'
+    - ''
   media:
-    - [
-        "",
-        "",
-        Sft+Gui+3,
-        Gui+Sft+4,
-        "",
-        "",
-        BRIGHTNESS DEC,
-        BRIGHTNESS INC,
-        "",
-        "",
-      ]
-    - [
-        Gui+Alt+Ctl+LEFT,
-        Alt+Gui+Ctl+F,
-        Gui+Ctl+F,
-        Alt+Gui+Ctl+RIGHT,
-        "",
-        PLAY PAUSE,
-        VOL DN,
-        VOLUME UP,
-        MUTE,
-        "",
-      ]
-    - ["", "", "", "", "", "", "", "", "", ""]
-    - - ""
-      - ""
-      - ""
-      - ""
-      - ""
-      - ""
-      - ""
-      - { type: held }
+  - ['', '', Sft+Gui+3, Gui+Sft+4, '', '', BRIGHTNESS DEC, BRIGHTNESS INC, '', '']
+  - [Gui+Alt+Ctl+LEFT, Alt+Gui+Ctl+F, Gui+Ctl+F, Alt+Gui+Ctl+RIGHT, '', PLAY PAUSE, VOL DN, VOLUME UP, MUTE, '']
+  - ['', '', '', '', '', '', '', '', '', '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {type: held}
   macros:
-    - ["", "", "", "", "", "", "", "", "", ""]
-    - [
-        "&name",
-        "&last_name",
-        "&personal_email",
-        "&work_email",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-      ]
-    - ["", "", "", "", "", "", "", "", "", ""]
-    - - ""
-      - ""
-      - ""
-      - ""
-      - ""
-      - { type: held }
-      - { type: held }
-      - ""
+  - ['', '', '', '', '', '', '', '', '', '']
+  - ['&name', '&last_name', '&personal_email', '&work_email', '', '', '', '', '', '']
+  - ['', '', '', '', '', '', '', '', '', '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {type: held}
+    - {type: held}
+    - ''
 combos:
-  - p: [1, 0]
-    k: ESCAPE
-  - p: [16, 17, 18]
-    k: RET
-  - p: [10, 11]
-    k: TAB
-  - p: [18, 17]
-    k: Alt+RIGHT
-    l: [base, nav, sym]
-  - p: [18, 19]
-    k: BACKSPACE
-  - p: [17, 16]
-    k: Alt+LEFT
-    l: [base, nav, sym]
-  - p: [35, 16, 17]
-    k: Alt+BACKSPACE
-    l: [base, nav]
-  - p: [17, 18, 35]
-    k: Alt+DELETE
-    l: [base, nav]
-  - p: [34, 20]
-    k: BT CLR
-    l: [media]
-  - p: [34, 21]
-    k: { t: BT, h: "0" }
-    l: [media]
-  - p: [34, 10]
-    k: { t: BT, h: "1" }
-    l: [media]
-  - p: [34, 0]
-    k: { t: BT, h: "2" }
-    l: [media]
-  - p: [34, 0, 10, 21]
-    k: "&sys_reset"
-    l: [media]
-  - p: [34, 35]
-    k: Ctl+SPACE
-    l: [base, nav]
-  - p: [10, 19]
-    k: "&caps_word"
-  - p: [12, 13]
-    k: mouse
-    l: [base, nav]
+- p: [1, 0]
+  k: ESCAPE
+- p: [16, 17, 18]
+  k: RET
+- p: [21, 22]
+  k: TAB
+- p: [18, 17]
+  k: Alt+RIGHT
+  l: [nav]
+- p: [18, 19]
+  k: BACKSPACE
+- p: [17, 16]
+  k: Alt+LEFT
+  l: [nav]
+- p: [35, 16, 17]
+  k: Alt+BACKSPACE
+  l: [base, nav]
+- p: [17, 18, 35]
+  k: Alt+DELETE
+  l: [base, nav]
+- p: [34, 20]
+  k: BT CLR
+  l: [media]
+- p: [34, 21]
+  k: {t: BT, h: '0'}
+  l: [media]
+- p: [34, 10]
+  k: {t: BT, h: '1'}
+  l: [media]
+- p: [34, 0]
+  k: {t: BT, h: '2'}
+  l: [media]
+- p: [34, 0, 10, 21]
+  k: '&sys_reset'
+  l: [media]
+- p: [34, 35]
+  k: Ctl+SPACE
+  l: [base, nav]
+- p: [10, 19]
+  k: '&caps_word'
+- p: [12, 13]
+  k: mouse
+  l: [base, nav]
