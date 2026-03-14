@@ -57,11 +57,16 @@ set background=dark
 set wildmode=longest,list,full
 set splitbelow splitright
 
+nnoremap <PageDown> <C-d> 
+nnoremap <PageUp> <C-u> 
+
 nnoremap x "_x
 nnoremap <leader>a "a
 nnoremap <leader>s "s
 nnoremap <leader>d "d
 nnoremap <leader><leader>r :reg "" "a "s "d<CR>
+
+nnoremap <S-u> <C-r>
 
 nnoremap <leader>ff :GFiles<CR>
 
@@ -82,3 +87,7 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 " imap <C-v> <C-R>*
 
 nnoremap <leader>pv :wincmd v<bar> :wincmd r<bar> :Ex<bar> :vertical resize 30<CR>
+
+nnoremap <leader>q @q
+
+nnoremap <leader>sq :%s/.*/'&',/<CR>
