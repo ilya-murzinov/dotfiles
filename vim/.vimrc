@@ -58,6 +58,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'moll/vim-bbye'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install', 'for': ['markdown'] }
 call plug#end()
 
 " Netrw: open files in the window that was active before (sidebar on left)
@@ -107,6 +108,16 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 " --- Mappings: fzf & file ---
 nnoremap <leader>ff :GFiles<CR>
 nnoremap <leader>fr :History<CR>
+
+" --- Markdown preview: open in new browser window (same workspace on macOS) ---
+function! MkdpOpenInNewWindow(url) abort
+  call system('open -na "Google Chrome" --args --new-window ' . shellescape(a:url))
+endfunction
+let g:mkdp_browserfunc = 'MkdpOpenInNewWindow'
+
+" --- Mappings: markdown preview ---
+nnoremap <leader>mp :MarkdownPreview<CR>
+nnoremap <leader>ms :MarkdownPreviewStop<CR>
 
 " --- Mappings: Netrw (file browser) ---
 nnoremap <leader>pv :leftabove vertical 30 split<CR>:Explore<CR>
