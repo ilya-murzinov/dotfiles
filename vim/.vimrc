@@ -59,16 +59,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'moll/vim-bbye'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install', 'for': ['markdown'] }
+Plug 'lambdalisue/fern.vim'
+Plug 'LumaKernel/fern-mapping-fzf.vim'
 call plug#end()
-
-" Netrw: open files in the window that was active before (sidebar on left)
-let g:netrw_browse_split = 4
-let g:netrw_banner = 0
-let g:netrw_winsize = 30
-let g:netrw_altv = 1
-let g:netrw_hide = 0
-" Don't hide parent dir (..) — only hide common junk
-let g:netrw_list_hide = '^\.swp$,^\.git$,\.DS_Store$'
 
 set background=dark
 try
@@ -99,7 +92,7 @@ vnoremap d "_d
 nnoremap <leader>a "a
 nnoremap <leader>s "s
 nnoremap <leader>d "d
-nnoremap <leader><leader>r :reg "" "a "s "d<CR>
+nnoremap <leader>r :reg "" "a "s "d<CR>
 nnoremap <S-u> <C-r>
 
 " --- Mappings: search & replace ---
@@ -119,15 +112,33 @@ let g:mkdp_browserfunc = 'MkdpOpenInNewWindow'
 nnoremap <leader>mp :MarkdownPreview<CR>
 nnoremap <leader>ms :MarkdownPreviewStop<CR>
 
-" --- Mappings: Netrw (file browser) ---
-nnoremap <leader>pv :leftabove vertical 30 split<CR>:Explore<CR>
-nnoremap <leader>pe :Explore<CR>
-nnoremap <leader>ps :Sexplore<CR>
-nnoremap <leader>ph :Explore ~<CR>
+" --- Fern (file explorer with fzf) ---
+let g:fern#default_hidden = 1
+let g:fern#scheme#file#show_absolute_path_on_root_label = 1
+augroup fern_custom
+  autocmd!
+  autocmd FileType fern setlocal norelativenumber | setlocal nonumber
+  " Open file in right pane (e); Space+u = go to parent dir (leave)
+  autocmd FileType fern nnoremap <buffer><silent> e <Plug>(fern-action-open:right)
+  autocmd FileType fern nnoremap <buffer><silent> <leader>u <Plug>(fern-action-leave)
+augroup END
+
+" --- Mappings: Fern (file browser) ---
+nnoremap <leader>pv :Fern . -drawer -width=30 -reveal=%<CR>
+nnoremap <leader>pe :Fern . -reveal=%<CR>
+nnoremap <leader>ps :Fern . -reveal=%<CR>
+nnoremap <leader>ph :Fern ~ -reveal=%<CR>
+
+" --- Mappings: tabs ---
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>th :tabprevious<CR>
+nnoremap <leader>tl :tabnext<CR>
 
 " --- Mappings: buffers ---
-nnoremap <leader>w :Bdelete<CR>
-nnoremap <leader><leader>qq :call ConfirmCloseAllBuffersAndQuit()<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader><leader>w :Bdelete<CR>
+nnoremap <leader><leader>qq :q<CR>
 function! ConfirmCloseAllBuffersAndQuit() abort
   if confirm('Close all buffers and exit Vim?', "&Yes\n&No", 2) == 1
     silent! execute '1,' . bufnr('$') . 'bdelete'
