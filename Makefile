@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-tmux
+	$(MAKE) link-vim link-tmux link-iterm2
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -19,6 +19,7 @@ karabiner:
 
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf"
+	@rm -f "$(DEST)/Library/Preferences/com.googlecode.iterm2.plist"
 	@echo "Removed symlinks."
 
 # Single-file links
@@ -28,6 +29,12 @@ link-vim:
 
 link-tmux:
 	ln -sf "$(REPO)/tmux/.tmux.conf" "$(DEST)/.tmux.conf"
+
+# iTerm2: plist in dotfiles, symlink from Library/Preferences (iTerm2 has no .conf file)
+link-iterm2:
+	@mkdir -p "$(DEST)/Library/Preferences"
+	ln -sf "$(REPO)/iterm2/com.googlecode.iterm2.plist" "$(DEST)/Library/Preferences/com.googlecode.iterm2.plist"
+	@echo "iTerm2: $(DEST)/Library/Preferences/com.googlecode.iterm2.plist -> $(REPO)/iterm2/com.googlecode.iterm2.plist"
 
 # ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:
