@@ -27,12 +27,21 @@ set ignorecase
 
 " --- Buffers & files ---
 set hidden
+set autoread
 set noswapfile
 set nobackup
 set undofile
 set undodir=~/.vim/undodir
 if !isdirectory(expand("~/.vim/undodir"))
   call mkdir(expand("~/.vim/undodir"), "p")
+endif
+augroup checktime_track_file
+  autocmd!
+  autocmd FocusGained,BufEnter * if expand('%') != '' | checktime | endif
+augroup END
+" Poll for file changes every 2s (FocusGained often doesn't fire in terminals/tmux)
+if has('timers')
+  call timer_start(2000, {-> execute('silent! checktime')}, {'repeat': -1})
 endif
 
 " --- Indent & tabs ---
@@ -101,6 +110,16 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 " --- Mappings: fzf & file ---
 nnoremap <leader>ff :GFiles<CR>
 nnoremap <leader>fr :History<CR>
+function! s:GlobalSearch() abort
+  if executable('rg')
+    call feedkeys(':Rg ', 'n')
+  elseif executable('ag')
+    call feedkeys(':Ag ', 'n')
+  else
+    echoerr 'Space gs needs ripgrep or ag. Install: brew install ripgrep'
+  endif
+endfunction
+nnoremap <leader>gs :call <SID>GlobalSearch()<CR>
 
 " --- Markdown preview: open in new browser window (same workspace on macOS) ---
 function! MkdpOpenInNewWindow(url) abort
@@ -115,12 +134,33 @@ nnoremap <leader>ms :MarkdownPreviewStop<CR>
 " --- Fern (file explorer with fzf) ---
 let g:fern#default_hidden = 1
 let g:fern#scheme#file#show_absolute_path_on_root_label = 1
+function! s:FernRevealCurrentFile() abort
+  if &filetype ==# 'fern' || expand('%') ==# '' || !filereadable(expand('%:p'))
+    return
+  endif
+  let path = expand('%:p')
+  let from_win = win_getid()
+  for w in range(1, winnr('$'))
+    let b = winbufnr(w)
+    if getbufvar(b, '&filetype') ==# 'fern'
+      call win_gotoid(win_getid(w))
+      try
+        execute 'FernReveal ' . fnameescape(path)
+      catch
+      endtry
+      call win_gotoid(from_win)
+      break
+    endif
+  endfor
+endfunction
 augroup fern_custom
   autocmd!
   autocmd FileType fern setlocal norelativenumber | setlocal nonumber
   " Open file in right pane (e); Space+u = go to parent dir (leave)
   autocmd FileType fern nnoremap <buffer><silent> e <Plug>(fern-action-open:right)
   autocmd FileType fern nnoremap <buffer><silent> <leader>u <Plug>(fern-action-leave)
+  " Keep explorer focused on the current file when opening/switching buffers
+  autocmd BufEnter * call s:FernRevealCurrentFile()
 augroup END
 
 " --- Mappings: Fern (file browser) ---
