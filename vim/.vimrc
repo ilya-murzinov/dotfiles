@@ -57,6 +57,7 @@ set backspace=indent,eol,start
 if has('clipboard')
   set clipboard=unnamed
 endif
+nnoremap <leader>m :set mouse=<C-r>=&mouse == '' ? 'a' : ''<CR><CR>
 
 " --- Performance (long lines) ---
 set synmaxcol=2000
@@ -70,6 +71,7 @@ Plug 'moll/vim-bbye'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install', 'for': ['markdown'] }
 Plug 'lambdalisue/fern.vim'
 Plug 'LumaKernel/fern-mapping-fzf.vim'
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 set background=dark
@@ -159,6 +161,11 @@ augroup fern_custom
   " Open file in right pane (e); Space+u = go to parent dir (leave)
   autocmd FileType fern nnoremap <buffer><silent> e <Plug>(fern-action-open:right)
   autocmd FileType fern nnoremap <buffer><silent> <leader>u <Plug>(fern-action-leave)
+  " vim-tmux-navigator: unbind anything Fern/plugins put on C-h/j/k/l, then use navigator
+  autocmd FileType fern silent! nunmap <buffer> <C-h>
+  autocmd FileType fern silent! nunmap <buffer> <C-j>
+  autocmd FileType fern silent! nunmap <buffer> <C-k>
+  autocmd FileType fern silent! nunmap <buffer> <C-l>
   " Keep explorer focused on the current file when opening/switching buffers
   autocmd BufEnter * call s:FernRevealCurrentFile()
 augroup END
@@ -187,6 +194,7 @@ function! ConfirmCloseAllBuffersAndQuit() abort
 endfunction
 
 " --- Mappings: macros & misc ---
+nnoremap q <Nop>
 nnoremap <leader>q @q
 nnoremap <leader>n /,<CR>lr<CR>
 nnoremap <leader>sq :%s/.*/'&',/<CR>
