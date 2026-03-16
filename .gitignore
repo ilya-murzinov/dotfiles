@@ -1,3 +1,6 @@
 .atom/*/*
 .DS_Store
 node_modules/
+# Local shell overrides (secrets / Jira / Bitbucket) — never commit
+zsh/.zshrc.local
+.zshrc.local

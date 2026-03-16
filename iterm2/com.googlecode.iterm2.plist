@@ -373,6 +373,28 @@
 					<key>Version</key>
 					<integer>0</integer>
 				</dict>
+				<key>0x24-0x20000-0xd</key>
+				<dict>
+					<key>Action</key>
+					<integer>10</integer>
+					<key>Label</key>
+					<string></string>
+					<key>Text</key>
+					<string>[13;2u</string>
+					<key>Version</key>
+					<integer>0</integer>
+				</dict>
+				<key>0xd-0x20000-0x24</key>
+				<dict>
+					<key>Action</key>
+					<integer>10</integer>
+					<key>Label</key>
+					<string></string>
+					<key>Text</key>
+					<string>[13;2u</string>
+					<key>Version</key>
+					<integer>0</integer>
+				</dict>
 			</dict>
 			<key>Link Color</key>
 			<dict>
