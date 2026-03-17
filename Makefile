@@ -19,7 +19,7 @@ karabiner:
 
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
-	@rm -f "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
+	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@echo "Removed symlinks."
 
 # Single-file links
@@ -36,9 +36,12 @@ link-zsh:
 # iTerm2 Dynamic Profiles: symlink the folder so profiles auto-load
 link-iterm2-dynamic-profiles:
 	@mkdir -p "$(REPO)/iterm2/DynamicProfiles"
-	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
-	@ln -sf "$(REPO)/iterm2/DynamicProfiles" "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
-	@echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"
+	@ITERM2_SUPPORT="$(DEST)/Library/Application Support/iTerm2"; \
+	ITERM2_DIR="$$ITERM2_SUPPORT/DynamicProfiles"; \
+	rm -rf "$$ITERM2_DIR"; \
+	ln -sf "$(REPO)/iterm2/DynamicProfiles" "$$ITERM2_DIR"; \
+	echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"; \
+	ls -ld "$$ITERM2_DIR"
 
 # ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:
