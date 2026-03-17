@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-tmux link-iterm2
+	$(MAKE) link-vim link-tmux link-zsh link-iterm2
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -18,7 +18,7 @@ karabiner:
 	@echo "Karabiner config written to $(DEST)/.config/karabiner/karabiner.json"
 
 uninstall:
-	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf"
+	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
 	@rm -f "$(DEST)/Library/Preferences/com.googlecode.iterm2.plist"
 	@echo "Removed symlinks."
 
@@ -29,6 +29,9 @@ link-vim:
 
 link-tmux:
 	ln -sf "$(REPO)/tmux/.tmux.conf" "$(DEST)/.tmux.conf"
+
+link-zsh:
+	ln -sf "$(REPO)/zsh/.zshrc" "$(DEST)/.zshrc"
 
 # iTerm2: plist in dotfiles, symlink from Library/Preferences (iTerm2 has no .conf file)
 link-iterm2:
