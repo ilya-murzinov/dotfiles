@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-tmux link-zsh link-iterm2
+	$(MAKE) link-vim link-tmux link-zsh
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -23,7 +23,6 @@ uninstall:
 	@defaults delete com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || true
 	@echo "Removed symlinks. iTerm2: switched back to default preferences location."
 
-# Single-file links
 link-vim:
 	ln -sf "$(REPO)/vim/.vimrc" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.ideavimrc" "$(DEST)/.ideavimrc"
@@ -34,16 +33,6 @@ link-tmux:
 link-zsh:
 	ln -sf "$(REPO)/zsh/.zshrc" "$(DEST)/.zshrc"
 
-# iTerm2: use "Load preferences from custom folder" (symlinked plist is unreliable on fresh installs)
-# Run from repo root so REPO is correct. Quit iTerm, run make install, reopen iTerm.
-link-iterm2:
-	@test -d "$(REPO)/iterm2" || (echo "Error: $(REPO)/iterm2 not found. Run make from dotfiles repo root." && exit 1)
-	@ITERM2_DIR="$(shell cd "$(REPO)" 2>/dev/null && pwd)/iterm2"; \
-	defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$$ITERM2_DIR"; \
-	defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true; \
-	echo "iTerm2: preferences folder set to $$ITERM2_DIR (quit iTerm and reopen to apply)"
-
-# ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:
 	@git remote get-url zmk-config >/dev/null 2>&1 || git remote add zmk-config git@github.com:ilya-murzinov/zmk-config-totem-stable.git
 
@@ -58,7 +47,6 @@ zmk-pull: zmk-remote
 zmk-push: zmk-remote
 	git subtree push --prefix=zmk zmk-config master
 
-# Keymap visualizer (ZMK → SVG via keymap-drawer). Installs pipx + keymap-drawer if missing.
 ZMK_KEYMAP ?= $(REPO)/zmk/config/totem.keymap
 KEYMAP_VIZ_DIR := $(REPO)/keymap-viz
 
