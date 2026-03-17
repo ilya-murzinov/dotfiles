@@ -33,15 +33,18 @@ link-tmux:
 link-zsh:
 	ln -sf "$(REPO)/zsh/.zshrc" "$(DEST)/.zshrc"
 
-# iTerm2 Dynamic Profiles: symlink the folder so profiles auto-load
+# iTerm2 Dynamic Profiles: full setup including clearing old preferences
 link-iterm2-dynamic-profiles:
+	@pgrep -x iTerm2 >/dev/null 2>&1 && (echo "Error: Quit iTerm2 first (Cmd+Q), then run again." && exit 1) || true
 	@mkdir -p "$(REPO)/iterm2/DynamicProfiles"
+	@echo "iTerm2: Clearing old preferences..."
+	@defaults delete com.googlecode.iterm2 LoadPrefsFromCustomFolder 2>/dev/null || true
+	@defaults delete com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || true
 	@ITERM2_SUPPORT="$(DEST)/Library/Application Support/iTerm2"; \
 	ITERM2_DIR="$$ITERM2_SUPPORT/DynamicProfiles"; \
 	rm -rf "$$ITERM2_DIR"; \
 	ln -sf "$(REPO)/iterm2/DynamicProfiles" "$$ITERM2_DIR"; \
-	echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"; \
-	ls -ld "$$ITERM2_DIR"
+	echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"
 
 # ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:
