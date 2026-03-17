@@ -19,8 +19,9 @@ karabiner:
 
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
-	@rm -f "$(DEST)/Library/Preferences/com.googlecode.iterm2.plist"
-	@echo "Removed symlinks."
+	@defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool false 2>/dev/null || true
+	@defaults delete com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || true
+	@echo "Removed symlinks. iTerm2: switched back to default preferences location."
 
 # Single-file links
 link-vim:
@@ -33,11 +34,14 @@ link-tmux:
 link-zsh:
 	ln -sf "$(REPO)/zsh/.zshrc" "$(DEST)/.zshrc"
 
-# iTerm2: plist in dotfiles, symlink from Library/Preferences (iTerm2 has no .conf file)
+# iTerm2: use "Load preferences from custom folder" (symlinked plist is unreliable on fresh installs)
+# Run from repo root so REPO is correct. Quit iTerm, run make install, reopen iTerm.
 link-iterm2:
-	@mkdir -p "$(DEST)/Library/Preferences"
-	ln -sf "$(REPO)/iterm2/com.googlecode.iterm2.plist" "$(DEST)/Library/Preferences/com.googlecode.iterm2.plist"
-	@echo "iTerm2: $(DEST)/Library/Preferences/com.googlecode.iterm2.plist -> $(REPO)/iterm2/com.googlecode.iterm2.plist"
+	@test -d "$(REPO)/iterm2" || (echo "Error: $(REPO)/iterm2 not found. Run make from dotfiles repo root." && exit 1)
+	@ITERM2_DIR="$(shell cd "$(REPO)" 2>/dev/null && pwd)/iterm2"; \
+	defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$$ITERM2_DIR"; \
+	defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true; \
+	echo "iTerm2: preferences folder set to $$ITERM2_DIR (quit iTerm and reopen to apply)"
 
 # ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:
