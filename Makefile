@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-tmux link-zsh
+	$(MAKE) link-vim link-tmux link-zsh link-iterm2-dynamic-profiles
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -19,10 +19,10 @@ karabiner:
 
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
-	@defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool false 2>/dev/null || true
-	@defaults delete com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || true
-	@echo "Removed symlinks. iTerm2: switched back to default preferences location."
+	@rm -f "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
+	@echo "Removed symlinks."
 
+# Single-file links
 link-vim:
 	ln -sf "$(REPO)/vim/.vimrc" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.ideavimrc" "$(DEST)/.ideavimrc"
@@ -33,6 +33,14 @@ link-tmux:
 link-zsh:
 	ln -sf "$(REPO)/zsh/.zshrc" "$(DEST)/.zshrc"
 
+# iTerm2 Dynamic Profiles: symlink the folder so profiles auto-load
+link-iterm2-dynamic-profiles:
+	@mkdir -p "$(REPO)/iterm2/DynamicProfiles"
+	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
+	@ln -sf "$(REPO)/iterm2/DynamicProfiles" "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
+	@echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"
+
+# ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:
 	@git remote get-url zmk-config >/dev/null 2>&1 || git remote add zmk-config git@github.com:ilya-murzinov/zmk-config-totem-stable.git
 
@@ -47,6 +55,7 @@ zmk-pull: zmk-remote
 zmk-push: zmk-remote
 	git subtree push --prefix=zmk zmk-config master
 
+# Keymap visualizer (ZMK → SVG via keymap-drawer). Installs pipx + keymap-drawer if missing.
 ZMK_KEYMAP ?= $(REPO)/zmk/config/totem.keymap
 KEYMAP_VIZ_DIR := $(REPO)/keymap-viz
 
