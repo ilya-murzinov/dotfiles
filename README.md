@@ -9,6 +9,7 @@ Configs and key mappings. Symlink into `$HOME` (or use [GNU Stow](https://www.gn
 | `vim/`        | .vimrc, .ideavimrc                                                                             | symlink via `make install`                                        |
 | `tmux/`       | .tmux.conf                                                                                     | symlink via `make install`                                       |
 | `iterm2/`     | com.googlecode.iterm2.plist                                                                   | symlink via `make install`                                        |
+| `cursor/`     | Cursor keybindings.json, settings.json                                                        | symlink via `make install` → `~/Library/Application Support/Cursor/User/` |
 | `karabiner/`  | Karabiner-Elements config (TypeScript source)                                                  | `make karabiner` — builds to `~/.config/karabiner/karabiner.json` |
 | `vial/`       | Vial keymaps (Corne / Corne Mini .vil) — load in [Vial](https://get.vial.today/) when flashing | Open the .vil file in Vial                                        |
 | `zmk/`        | ZMK firmware config (Totem) — git subtree from zmk-config-totem-stable                         | `make zmk-pull` / `make zmk-push` to sync                         |
@@ -168,6 +169,20 @@ Leader is **Space**. All mappings below are `Space` + key unless noted.
 | `Space Space w` | Bdelete (close buffer) |
 | `Space Space qq` | Quit |
 
+#### Git (fugitive + gitgutter)
+
+| Keys / Command | Action |
+|----------------|--------|
+| `:G` | Git status (summary, stage with `-`, open file with `Enter`) |
+| `:G diff` | Diff against index |
+| `:G blame` | Blame current file |
+| `:G commit` | Commit (write buffer to commit, close to abort) |
+| `Space gd` | Show diff of current hunk (gitgutter preview) |
+| `Space gu` | Undo hunk (revert changes on current line/block) |
+| `Space gn` / `Space gN` | Next / previous hunk |
+| `Space gp` | Close preview window (after `gd`) |
+| Gutter | **vim-gitgutter**: signs in margin for added/modified/deleted lines |
+
 #### Misc
 
 | Keys | Action |
@@ -186,3 +201,5 @@ Leader is **Space**. All mappings below are `Space` + key unless noted.
 - **markdown-preview.nvim**
 - **fern.vim** + fern-mapping-fzf
 - **vim-tmux-navigator**
+- **vim-fugitive** (Git commands)
+- **vim-gitgutter** (git change signs in gutter)

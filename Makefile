@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-tmux link-zsh link-iterm2-dynamic-profiles
+	$(MAKE) link-vim link-tmux link-zsh link-iterm2-dynamic-profiles link-cursor
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -20,6 +20,7 @@ karabiner:
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
 	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
+	@rm -f "$(DEST)/Library/Application Support/Cursor/User/keybindings.json" "$(DEST)/Library/Application Support/Cursor/User/settings.json"
 	@echo "Removed symlinks."
 
 # Single-file links
@@ -45,6 +46,13 @@ link-iterm2-dynamic-profiles:
 	rm -rf "$$ITERM2_DIR"; \
 	ln -sf "$(REPO)/iterm2/DynamicProfiles" "$$ITERM2_DIR"; \
 	echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"
+
+# Cursor: keybindings + settings -> ~/Library/Application Support/Cursor/User/
+link-cursor:
+	@mkdir -p "$(DEST)/Library/Application Support/Cursor/User"
+	@ln -sf "$(REPO)/cursor/keybindings.json" "$(DEST)/Library/Application Support/Cursor/User/keybindings.json"
+	@ln -sf "$(REPO)/cursor/settings.json" "$(DEST)/Library/Application Support/Cursor/User/settings.json"
+	@echo "Cursor: keybindings.json and settings.json symlinked to $(REPO)/cursor/"
 
 # ZMK config: subtree linked to zmk-config-totem-stable repo
 zmk-remote:

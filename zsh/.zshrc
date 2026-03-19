@@ -23,7 +23,7 @@ ZSH_THEME="agnoster"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment one of the following lines to change the auto-update behavior
+# Uncomment the following line to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
@@ -106,5 +106,8 @@ export PATH="$HOME/.local/bin:$PATH"
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-# Attach to tmux on shell start if not already in tmux
-[[ -z "$TMUX" ]] && (exec tmux attach -d 2>/dev/null)
+# Attach to tmux only when there is an orphan (unattached) session
+if [[ -z "$TMUX" ]]; then
+  orphan=$(tmux list-sessions -F '#{?session_attached,,#{session_name}}' 2>/dev/null | head -1)
+  [[ -n "$orphan" ]] && exec tmux attach -t "$orphan" -d
+fi

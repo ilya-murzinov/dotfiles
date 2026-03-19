@@ -72,7 +72,16 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install',
 Plug 'lambdalisue/fern.vim'
 Plug 'LumaKernel/fern-mapping-fzf.vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 call plug#end()
+
+" --- Mappings: git (fugitive + gitgutter) ---
+nnoremap <leader>gd :GitGutterPreviewHunk<CR>
+nnoremap <leader>gu :GitGutterUndoHunk<CR>
+nnoremap <leader>gn :GitGutterNextHunk<CR>
+nnoremap <leader>gN :GitGutterPrevHunk<CR>
+nnoremap <leader>gp :pclose<CR>
 
 set background=dark
 try
