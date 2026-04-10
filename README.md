@@ -8,12 +8,23 @@ Configs and key mappings. Symlink into `$HOME` (or use [GNU Stow](https://www.gn
 | ------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `vim/`        | .vimrc, .ideavimrc                                                                             | symlink via `make install`                                        |
 | `tmux/`       | .tmux.conf                                                                                     | symlink via `make install`                                       |
-| `iterm2/`     | com.googlecode.iterm2.plist                                                                   | symlink via `make install`                                        |
-| `cursor/`     | Cursor keybindings.json, settings.json                                                        | symlink via `make install` → `~/Library/Application Support/Cursor/User/` |
+| `iterm2/`     | DynamicProfiles/Default.json (catppuccin macchiato bg/fg)                                     | symlink via `make install`; import catppuccin color preset in iTerm2 |
+| `cursor/`     | Cursor keybindings.json, settings.json (catppuccin mocha theme)                               | symlink via `make install` → `~/Library/Application Support/Cursor/User/` |
 | `karabiner/`  | Karabiner-Elements config (TypeScript source)                                                  | `make karabiner` — builds to `~/.config/karabiner/karabiner.json` |
 | `vial/`       | Vial keymaps (Corne / Corne Mini .vil) — load in [Vial](https://get.vial.today/) when flashing | Open the .vil file in Vial                                        |
 | `zmk/`        | ZMK firmware config (Totem) — git subtree from zmk-config-totem-stable                         | `make zmk-pull` / `make zmk-push` to sync                         |
 | `keymap-viz/` | Keymap visualizer (ZMK → SVG via [keymap-drawer](https://github.com/caksoylar/keymap-drawer))  | `make keymap-viz` — picture in `keymap-viz/README.md`             |
+| `zsh/`        | .zshrc (agnoster prompt with catppuccin colors)                                                | symlink via `make install`                                        |
+
+## Theme
+
+All tools use **Catppuccin Mocha** theme:
+
+- **iTerm2**: Background/foreground colors set; import full color preset via Preferences → Profiles → Colors → Color Presets → Import (get from catppuccin/iterm repo)
+- **tmux**: catppuccin/tmux plugin with macchiato flavor
+- **vim**: catppuccin/vim plugin with macchiato colorscheme
+- **Cursor**: Catppuccin Mocha workbench theme
+- **zsh**: agnoster prompt customized with catppuccin color palette
 
 ## Install
 
@@ -196,7 +207,7 @@ Leader is **Space**. All mappings below are `Space` + key unless noted.
 #### Plugins
 
 - **fzf** (GFiles, History, Rg)
-- **catppuccin** (colorscheme)
+- **catppuccin** (catppuccin_mocha colorscheme)
 - **vim-bbye** (Bdelete)
 - **markdown-preview.nvim**
 - **fern.vim** + fern-mapping-fzf

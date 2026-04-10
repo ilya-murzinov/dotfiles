@@ -44,6 +44,12 @@ if has('timers')
   call timer_start(2000, {-> execute('silent! checktime')}, {'repeat': -1})
 endif
 
+" --- Autosave ---
+augroup autosave
+  autocmd!
+  autocmd InsertLeave,TextChanged,FocusLost * if expand('%') != '' && &buftype == '' && !&readonly && &modifiable | silent! write | endif
+augroup END
+
 " --- Indent & tabs ---
 set tabstop=4
 set softtabstop=4
@@ -211,3 +217,4 @@ nnoremap <leader>sq :%s/.*/'&',/<CR>
 " --- Visual mode ---
 xnoremap <Tab> >gv
 xnoremap <S-Tab> <gv
+xnoremap d d
