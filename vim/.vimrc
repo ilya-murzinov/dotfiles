@@ -13,7 +13,7 @@ set scrolloff=8
 set nowrap
 set colorcolumn=80
 set termguicolors
-set guicursor=
+" set guicursor=  " Allow mode-based cursor shapes (block normal, line insert)
 set noshowmatch
 set cmdheight=2
 set shortmess+=c

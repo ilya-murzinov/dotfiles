@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-tmux link-zsh link-iterm2-dynamic-profiles link-cursor
+	$(MAKE) link-vim link-nvim link-tmux link-zsh link-iterm2-dynamic-profiles link-cursor
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -19,6 +19,7 @@ karabiner:
 
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
+	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
 	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@rm -f "$(DEST)/Library/Application Support/Cursor/User/keybindings.json" "$(DEST)/Library/Application Support/Cursor/User/settings.json"
 	@echo "Removed symlinks."
@@ -27,6 +28,11 @@ uninstall:
 link-vim:
 	ln -sf "$(REPO)/vim/.vimrc" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.ideavimrc" "$(DEST)/.ideavimrc"
+
+link-nvim:
+	@mkdir -p "$(DEST)/.config/nvim/lua"
+	ln -sf "$(REPO)/nvim/init.lua" "$(DEST)/.config/nvim/init.lua"
+	ln -sf "$(REPO)/nvim/lua/plugins.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
 
 link-tmux:
 	ln -sf "$(REPO)/tmux/.tmux.conf" "$(DEST)/.tmux.conf"
