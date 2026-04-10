@@ -214,3 +214,24 @@ Leader is **Space**. All mappings below are `Space` + key unless noted.
 - **vim-tmux-navigator**
 - **vim-fugitive** (Git commands)
 - **vim-gitgutter** (git change signs in gutter)
+
+---
+
+### Terminal (zsh)
+
+#### Navigation tools
+
+| Tool | Install | Usage |
+|------|---------|-------|
+| **z** (zoxide) | `brew install zoxide` | `z <partial>` → jump to frequent dir |
+| | | `zi` → interactive dir selection (fzf) |
+| | | `cd` → aliased to `z` (auto-learning) |
+| **fzf** | `brew install fzf` | `Ctrl+T` → fuzzy file finder (pastes path) |
+| | `$(brew --prefix)/opt/fzf/install` | `Ctrl+R` → fuzzy history search |
+| | | `Alt+C` → fuzzy cd to directory |
+
+#### Shell aliases
+
+| Alias | Command | Description |
+|-------|---------|-------------|
+| `cd` | `z` | zoxide-powered directory jumping |

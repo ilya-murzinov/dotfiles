@@ -231,6 +231,22 @@ export PATH="$HOME/.local/bin:$PATH"
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
+# z (zoxide) - smarter cd that learns your habits
+# Install: brew install zoxide
+# Usage: z <partial-path> → jumps to most frequent match
+#        zi              → interactive selection with fzf
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+  alias cd='z'  # Replace cd with z for automatic learning
+fi
+
+# fzf - fuzzy finder for terminal
+# Install: brew install fzf && $(brew --prefix)/opt/fzf/install
+# Key bindings: Ctrl+T (files), Ctrl+R (history), Alt+C (directories)
+if [[ -f ~/.fzf.zsh ]]; then
+  source ~/.fzf.zsh
+fi
+
 # Attach to tmux only when there is an orphan (unattached) session
 if [[ -z "$TMUX" ]]; then
   orphan=$(tmux list-sessions -F '#{?session_attached,,#{session_name}}' 2>/dev/null | head -1)
