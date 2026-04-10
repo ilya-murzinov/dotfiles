@@ -5,16 +5,16 @@
       "Guid": "6618198B-6735-43A9-B29D-708893E95972",
       "Normal Font": "JetBrainsMonoNFM-Regular 15",
       "Background Color": {
-        "Blue Component": 0.21,
         "Color Space": "sRGB",
-        "Green Component": 0.17,
-        "Red Component": 0.0
+        "Red Component": 0.141,
+        "Green Component": 0.153,
+        "Blue Component": 0.227
       },
       "Foreground Color": {
-        "Blue Component": 0.59,
         "Color Space": "sRGB",
-        "Green Component": 0.58,
-        "Red Component": 0.51
+        "Red Component": 0.792,
+        "Green Component": 0.827,
+        "Blue Component": 0.961
       },
       "Keyboard Map": {
         "0x7b-0x120000-0x21": { "Action": 11, "Text": "13 70" },
