@@ -112,9 +112,6 @@ nnoremap <leader>l <C-w>l
 
 " --- Mappings: registers & edit ---
 nnoremap x "_x
-nnoremap d "_d
-nnoremap dd "_dd
-vnoremap d "_d
 nnoremap <leader>a "a
 nnoremap <leader>s "s
 nnoremap <leader>d "d
