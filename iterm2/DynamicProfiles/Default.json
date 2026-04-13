@@ -17,8 +17,8 @@
         "Blue Component": 0.961
       },
       "Keyboard Map": {
-        "0x7b-0x120000-0x21": { "Action": 11, "Text": "13 70" },
-        "0x7d-0x120000-0x1e": { "Action": 11, "Text": "13 6e" },
+        "0x7b-0x120000-0x21": { "Action": 11, "Text": "13 5b" },
+        "0x7d-0x120000-0x1e": { "Action": 11, "Text": "13 5d" },
         "0xd-0x20000-0x24": { "Action": 10, "Text": "[13;2u" }
       }
     }

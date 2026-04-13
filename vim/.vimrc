@@ -101,6 +101,7 @@ highlight ColorColumn ctermbg=0 guibg=#4a4a4a
 set wildmode=longest,list,full
 set splitbelow
 set splitright
+nnoremap <leader>v :vsplit<CR>
 
 " --- Mappings: movement ---
 nnoremap <PageDown> <C-d>
