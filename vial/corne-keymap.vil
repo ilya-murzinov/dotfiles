@@ -80,10 +80,10 @@
       [
         -1,
         "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
         "LSFT(KC_7)",
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_GRAVE",
         "KC_TRNS"
       ],
       [
@@ -97,10 +97,10 @@
       ],
       [
         -1,
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_TRNS",
+        "KC_RBRACKET",
+        "KC_LBRACKET",
+        "LSFT(KC_SLASH)",
+        "KC_SLASH",
         "KC_TRNS",
         -1
       ],
@@ -124,7 +124,7 @@
       ],
       [
         -1,
-        "KC_QUOTE",
+        "KC_TRNS",
         "KC_TRNS",
         "KC_TRNS",
         "KC_TRNS",
@@ -135,8 +135,8 @@
         -1,
         "KC_TRNS",
         "KC_SLASH",
-        "LSFT(KC_SLASH)",
-        "KC_RBRACKET",
+        "KC_TRNS",
+        "KC_TRNS",
         "KC_TRNS",
         -1
       ],
@@ -228,10 +228,10 @@
       [
         -1,
         "LSFT(KC_1)",
-        "LSFT(KC_SLASH)",
         "LSFT(KC_2)",
         "LSFT(KC_3)",
         "LSFT(KC_4)",
+        "LSFT(KC_SLASH)",
         "KC_NO"
       ],
       [
@@ -1208,16 +1208,16 @@
     ],
     [
       [
-        "RGB_MOD",
-        "RGB_RMOD"
+        "KC_TRNS",
+        "KC_TRNS"
       ],
       [
         "RGB_HUI",
         "RGB_HUD"
       ],
       [
-        "RGB_VAI",
-        "RGB_VAD"
+        "KC_TRNS",
+        "KC_TRNS"
       ],
       [
         "RGB_SAI",
@@ -1529,7 +1529,16 @@
         "KC_LEFT"
       ]
     ],
-    [],
+    [
+      [
+        "text",
+        "\"\""
+      ],
+      [
+        "tap",
+        "KC_LEFT"
+      ]
+    ],
     [
       [
         "text",
@@ -2550,11 +2559,11 @@
     "19": 80,
     "20": 5,
     "21": 0,
-    "22": 0,
-    "23": 1,
+    "22": 1,
+    "23": 0,
     "24": 0,
-    "25": 150,
+    "25": 0,
     "26": 1,
-    "27": 200
+    "27": 0
   }
 }
