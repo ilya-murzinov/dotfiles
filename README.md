@@ -83,9 +83,9 @@ All bindings below use prefix **C-s** (Ctrl+s) unless marked `-n` (no prefix).
 
 | Keys | Action |
 |------|--------|
-| `C-s c` | New window |
-| `C-s n` | Next window |
-| `C-s p` | Prev window |
+| `C-s n` | New window |
+| `C-s ]` | Next window |
+| `C-s [` | Previous window |
 | `C-s 1` … `9` | Go to window 1–9 |
 | `C-s 0` | Go to window 10 |
 | `C-s q` | Kill window (confirm) |
@@ -94,7 +94,7 @@ All bindings below use prefix **C-s** (Ctrl+s) unless marked `-n` (no prefix).
 
 | Keys | Action |
 |------|--------|
-| `C-s y` | Enter copy mode (scrollback) |
+| `C-s c` | Enter copy mode (scrollback) |
 | `v` | Begin selection |
 | `y` | Yank selection to clipboard (tmux-yank) |
 | `q` | Quit copy mode |
@@ -235,3 +235,26 @@ Leader is **Space**. All mappings below are `Space` + key unless noted.
 | Alias | Command | Description |
 |-------|---------|-------------|
 | `cd` | `z` | zoxide-powered directory jumping |
+
+---
+
+## Cheatsheet
+
+### Quick Reference
+
+| Context | Keys / Command | Action |
+|---------|---------------|--------|
+| **Tmux** | `C-s` | Prefix key |
+| | `C-s h/j/k/l` | Navigate panes |
+| | `C-s n` | New window |
+| | `C-s c` | Copy mode |
+| | `C-s d` | Detach session |
+| **Vim** | `Space` | Leader key |
+| | `Space h/j/k/l` | Navigate windows |
+| | `Space ff` | Find files (fzf) |
+| | `Space gd` | Show git diff |
+| | `Space w` | Save file |
+| **Zsh** | `z <dir>` | Jump to directory |
+| | `zi` | Interactive directory picker |
+| | `Ctrl+T` | Fuzzy file finder |
+| | `Ctrl+R` | Fuzzy history search |
