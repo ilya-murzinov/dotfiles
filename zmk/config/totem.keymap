@@ -462,10 +462,10 @@
 
         rus {
             bindings = <
-        &trans  &kp LS(N7)  &trans  &trans  &kp GRAVE    &trans  &trans             &trans         &trans     &kp LEFT_BRACKET
-        &trans  &trans      &trans  &trans  &trans       &trans  &trans             &trans         &trans     &kp APOS
-&trans  &trans  &trans      &trans  &trans  &trans       &trans  &kp RIGHT_BRACKET  &kp LS(SLASH)  &kp SLASH  &trans            &trans
-                            &trans  &trans  &trans       &trans  &trans             &trans
+        &trans       &kp LS(N7)      &trans      &trans      &kp GRAVE        &trans  &trans       &trans       &trans       &kp LEFT_BRACKET
+        &trans       &trans          &trans      &trans      &trans           &trans  &trans       &trans       &trans       &kp APOS
+&trans  &trans       &trans          &trans      &trans      &trans           &trans  &kp RIGHT_BRACKET  &kp LS(SLASH)  &kp SLASH  &trans            &trans
+                                    &trans      &trans      &trans           &trans  &trans       &trans
             >;
         };
 
@@ -480,10 +480,10 @@
 
         sym {
             bindings = <
-       &kp EXCL   &kp QUESTION  &kp AT         &kp HASH  &kp DOLLAR    &tilde_td    &kp N7  &kp N8  &kp N9  &kp RPAR
-       &minus_td  &plus_td      &div_td        &mult_td  &eq_td        &grave_td    &kp N4  &kp N5  &kp N6  &paren_td
-&none  &kp UNDER  &kp PERCENT   &kp BACKSLASH  &amp_td   &pipe_td      &kp N0       &kp N1  &kp N2  &kp N3  &kp SLASH  &none
-                                &none          &none     &none         &lt 4 SPACE  &mo 7   &none
+       &trans      &kp LS(N7)  &trans       &trans       &kp GRAVE     &trans  &trans  &trans  &trans  &kp LEFT_BRACKET
+       &trans      &trans      &trans       &trans       &trans        &trans  &trans  &trans  &trans  &kp APOS
+&none  &trans      &trans      &trans       &trans       &trans        &kp RIGHT_BRACKET  &kp SLASH  &kp LS(SLASH)  &trans  &trans  &none
+                               &trans       &trans       &trans        &trans  &trans  &trans
             >;
         };
 
