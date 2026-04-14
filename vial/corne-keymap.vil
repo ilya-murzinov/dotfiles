@@ -88,8 +88,8 @@
       ],
       [
         -1,
-        "KC_TRNS",
-        "KC_TRNS",
+        "LSFT(KC_2)",
+        "LSFT(KC_6)",
         "KC_TRNS",
         "KC_TRNS",
         "KC_TRNS",
@@ -115,15 +115,6 @@
       ],
       [
         -1,
-        "KC_LBRACKET",
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_TRNS"
-      ],
-      [
-        -1,
         "KC_TRNS",
         "KC_TRNS",
         "KC_TRNS",
@@ -134,7 +125,16 @@
       [
         -1,
         "KC_TRNS",
-        "KC_SLASH",
+        "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS"
+      ],
+      [
+        -1,
+        "KC_TRNS",
+        "KC_TRNS",
         "KC_TRNS",
         "KC_TRNS",
         "KC_TRNS",
@@ -209,8 +209,8 @@
         -1,
         "KC_NO",
         "KC_NO",
-        "LGUI(KC_RBRACKET)",
-        "LGUI(KC_LBRACKET)",
+        "KC_NO",
+        "KC_NO",
         "KC_NO",
         -1
       ],
@@ -275,7 +275,7 @@
         "KC_RSHIFT",
         "KC_RCTRL",
         "RALT_T(KC_RBRACKET)",
-        "RGUI_T(KC_LBRACKET)",
+        "TD(6)",
         "KC_NO",
         "KC_NO"
       ],
@@ -1881,7 +1881,7 @@
     [
       "LALT_T(KC_D)",
       "LGUI_T(KC_F)",
-      "KC_NO",
+      "LCTL_T(KC_S)",
       "KC_NO",
       "MO(5)"
     ],
@@ -2540,7 +2540,7 @@
   ],
   "settings": {
     "1": 0,
-    "2": 50,
+    "2": 100,
     "3": 0,
     "4": 175,
     "5": 5,
