@@ -88,6 +88,7 @@ nnoremap <leader>gu :GitGutterUndoHunk<CR>
 nnoremap <leader>gn :GitGutterNextHunk<CR>
 nnoremap <leader>gN :GitGutterPrevHunk<CR>
 nnoremap <leader>gp :pclose<CR>
+nnoremap <leader>ga :Git blame --date=short --abbrev=6<CR>
 
 set background=dark
 try
