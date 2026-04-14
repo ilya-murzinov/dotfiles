@@ -462,37 +462,37 @@
 
         rus {
             bindings = <
-        &trans       &kp LS(N7)      &trans      &trans      &kp GRAVE        &trans  &trans       &trans       &trans       &kp LEFT_BRACKET
-        &trans       &trans          &trans      &trans      &trans           &trans  &trans       &trans       &trans       &kp APOS
-&trans  &trans       &trans          &trans      &trans      &trans           &trans  &kp RIGHT_BRACKET  &kp LS(SLASH)  &kp SLASH  &trans            &trans
+        &trans       &trans          &trans      &trans      &kp LS(N7)       &trans  &trans       &trans       &trans       &kp LEFT_BRACKET
+        &trans       &trans          &trans      &trans      &trans           &trans  &trans       &trans       &trans       &trans
+&trans  &kp RIGHT_BRACKET  &kp LEFT_BRACKET  &kp LS(SLASH)  &kp SLASH      &trans           &trans  &trans       &trans       &trans       &trans            &trans
                                     &trans      &trans      &trans           &trans  &trans       &trans
             >;
         };
 
         nav {
             bindings = <
-       &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)      &kp LG(NUMBER_4)       &kp LG(N5)    &none     &kp PAGE_DOWN             &kp PAGE_UP                &none      &none
-       &kp LEFT_SHIFT    &kp LC(UP_ARROW)  &kp LC(LEFT_ARROW)    &kp LC(RIGHT)          &none         &kp LEFT  &kp DOWN                  &kp UP                     &kp RIGHT  &none
-&none  &none             &none             &kp LG(LEFT_BRACKET)  &kp LG(RIGHT_BRACKET)  &none         &none     &kp LG(LS(LEFT_BRACKET))  &kp LG(LS(RIGHT_BRACKET))  &none      &none  &none
-                                           &none                 &none                  &none         &none     &none                     &none
+       &kp LG(N1)  &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)    &none  &kp PG_UP  &kp PG_DN  &none  &none
+       &kp LSHIFT  &kp LC(UP)  &kp LC(LEFT)  &kp LC(RIGHT)  &none    &none  &kp LEFT  &kp DOWN  &kp UP  &kp BSPC
+&none  &none       &none       &kp LS(LG(LBKT))  &kp LS(LG(RBKT))  &none    &none  &kp LG(LBKT)  &kp LG(RBKT)  &none  &none  &none
+                               &none  &none  &none  &none  &none  &none
             >;
         };
 
         sym {
             bindings = <
-       &trans      &kp LS(N7)  &trans       &trans       &kp GRAVE     &trans  &trans  &trans  &trans  &kp LEFT_BRACKET
-       &trans      &trans      &trans       &trans       &trans        &trans  &trans  &trans  &trans  &kp APOS
-&none  &trans      &trans      &trans       &trans       &trans        &kp RIGHT_BRACKET  &kp SLASH  &kp LS(SLASH)  &trans  &trans  &none
+       &trans      &trans      &trans       &trans       &trans        &trans  &trans  &trans  &trans  &kp LEFT_BRACKET
+       &trans      &trans      &trans       &trans       &trans        &trans  &trans  &trans  &trans  &trans
+&none  &trans      &trans      &trans       &trans       &trans        &trans  &trans  &kp SLASH  &trans  &trans  &none
                                &trans       &trans       &trans        &trans  &trans  &trans
             >;
         };
 
         sym_add {
             bindings = <
-       &kp EXCL   &kp QUESTION  &kp AT         &kp HASH  &kp DOLLAR     &kp CARET  &none        &none              &none  &none
-       &minus_td  &plus_td      &div_td        &mult_td  &eq_td         &none      &bracket_td  &kp RIGHT_BRACKET  &none  &none
-&none  &kp UNDER  &kp PERCENT   &kp BACKSLASH  &amp_td   &pipe_td       &none      &curly_td    &kp RIGHT_BRACE    &none  &none  &none
-                                &none          &none     &lt 3 SPACE    &none      &mo 7        &none
+       &kp EXCL      &kp AT          &kp HASH       &kp DLLR      &kp LS(FSLH)  &trans     &trans     &trans         &trans         &trans
+       &minus_td     &plus_td        &div_td        &mult_td      &eq_td        &trans     &kp RCTRL  &hmr RALT RBKT  &hmr RGUI LBKT  &kp RSHIFT
+&none  &kp LS(MINUS)  &kp LS(N5)     &kp BSLH       &amp_td       &pipe_td      &trans     &trans     &trans         &trans         &trans            &none
+                                   &trans          &trans        &trans        &trans     &mo 6      &trans
             >;
         };
 
