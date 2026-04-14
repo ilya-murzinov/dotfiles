@@ -1,6 +1,5 @@
-.atom/*/*
 .DS_Store
 node_modules/
-# Local shell overrides (secrets / Jira / Bitbucket) — never commit
+__pycache__/
 zsh/.zshrc.local
 .zshrc.local

@@ -70,5 +70,5 @@ zmk-force-push: zmk-remote
 	git branch -D zmk-split-tmp
 
 zmk-sync:
-	python3 sync-keymap.py
+	python3 sync_keymap.py
 
