@@ -5,7 +5,7 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 
-.PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push keymap-drawer-deps keymap-viz
+.PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push zmk-force-push keymap-drawer-deps keymap-viz
 
 install:
 	$(MAKE) link-vim link-nvim link-tmux link-zsh link-iterm2-dynamic-profiles link-cursor
@@ -64,4 +64,9 @@ zmk-pull: zmk-remote
 
 zmk-push: zmk-remote
 	git subtree push --prefix=zmk zmk-config master
+
+zmk-force-push: zmk-remote
+	git subtree split --prefix=zmk -b zmk-split-tmp
+	git push zmk-config zmk-split-tmp:master --force
+	git branch -D zmk-split-tmp
 
