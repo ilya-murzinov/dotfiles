@@ -2,6 +2,8 @@
 let mapleader = " "
 nmap <space> <Leader>
 set timeoutlen=500
+set conceallevel=2
+set concealcursor=n
 
 syntax on
 filetype plugin indent on
@@ -35,6 +37,11 @@ set undodir=~/.vim/undodir
 if !isdirectory(expand("~/.vim/undodir"))
   call mkdir(expand("~/.vim/undodir"), "p")
 endif
+
+" Auto-cd to project root on buffer switch (vim-rooter handles this)
+let g:rooter_change_directory_for_non_project_files = 'current'
+let g:rooter_cd_cmd = 'lcd'
+silent! Rooter
 augroup checktime_track_file
   autocmd!
   autocmd FocusGained,BufEnter * if expand('%') != '' | checktime | endif
@@ -74,21 +81,24 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'moll/vim-bbye'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install', 'for': ['markdown'] }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 Plug 'lambdalisue/fern.vim'
 Plug 'LumaKernel/fern-mapping-fzf.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'mbbill/undotree'
+Plug 'airblade/vim-rooter'
 call plug#end()
 
 " --- Mappings: git (fugitive + gitgutter) ---
 nnoremap <leader>gd :GitGutterPreviewHunk<CR>
 nnoremap <leader>gu :GitGutterUndoHunk<CR>
-nnoremap <leader>gn :GitGutterNextHunk<CR>
-nnoremap <leader>gN :GitGutterPrevHunk<CR>
+nnoremap <leader>gdn :GitGutterNextHunk<CR>
+nnoremap <leader>gdp :GitGutterPrevHunk<CR>
 nnoremap <leader>gp :pclose<CR>
 nnoremap <leader>ga :Git blame --date=short --abbrev=6<CR>
+nnoremap <leader>gc :Git<CR>
 
 set background=dark
 try
@@ -132,10 +142,12 @@ function! s:GlobalSearch() abort
   elseif executable('ag')
     call feedkeys(':Ag ', 'n')
   else
-    echoerr 'Space gs needs ripgrep or ag. Install: brew install ripgrep'
+    echoerr 'Space sg needs ripgrep or ag. Install: brew install ripgrep'
   endif
 endfunction
-nnoremap <leader>gs :call <SID>GlobalSearch()<CR>
+nnoremap <leader>sg :call <SID>GlobalSearch()<CR>
+vnoremap <leader>sg "hy:Rg <C-r>h<CR>
+nnoremap <leader>sw :Rg <C-r><C-w><CR>
 
 " --- Markdown preview: open in new browser window (same workspace on macOS) ---
 function! MkdpOpenInNewWindow(url) abort
@@ -199,7 +211,7 @@ nnoremap <leader>tl :tabnext<CR>
 " --- Mappings: buffers ---
 nnoremap <leader>w :w<CR>
 nnoremap <leader><leader>w :Bdelete<CR>
-nnoremap <leader><leader>qq :q<CR>
+nnoremap <leader>qq :q<CR>
 function! ConfirmCloseAllBuffersAndQuit() abort
   if confirm('Close all buffers and exit Vim?', "&Yes\n&No", 2) == 1
     silent! execute '1,' . bufnr('$') . 'bdelete'
@@ -212,6 +224,12 @@ nnoremap q <Nop>
 nnoremap <leader>q @q
 nnoremap <leader>n /,<CR>lr<CR>
 nnoremap <leader>sq :%s/.*/'&',/<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
+
+" --- Undotree ---
+let g:undotree_WindowLayout = 3
+let g:undotree_SplitWidth = 40
+let g:undotree_SetFocusWhenToggle = 1
 
 " --- Visual mode ---
 xnoremap <Tab> >gv
