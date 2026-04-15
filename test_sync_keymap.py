@@ -2,7 +2,16 @@
 """Tests for sync-keymap.py — documents the QMK→ZMK mapping behavior."""
 
 import unittest
-from sync_keymap import parse_key, extract_layer, resolve
+from sync_keymap import (
+    parse_key,
+    extract_layer,
+    resolve,
+    build_vial_position_map,
+    format_combo,
+    format_combos,
+    splice_combos,
+    COMBO_CONFIG,
+)
 
 
 class TestResolve(unittest.TestCase):
@@ -306,6 +315,168 @@ class TestExtractLayer(unittest.TestCase):
         layer[7] = [-1, -1, -1, "KC_NO", "KC_NO", "KC_NO", -1]
         keys = extract_layer(layer, 0)
         self.assertEqual(len(keys), 38)
+
+
+def _make_minimal_layer():
+    """Return a minimal all-KC_NO Vial layer (8 rows x 7 cols)."""
+    base = [[-1] + ["KC_NO"] * 6] * 4
+    thumb = [[-1, -1, -1, "KC_NO", "KC_NO", "KC_NO", -1]]
+    return base + thumb + [[-1] + ["KC_NO"] * 6] * 3 + thumb
+
+
+class TestBuildVialPositionMap(unittest.TestCase):
+    def _vil(self, layers):
+        return {"layout": layers, "combo": []}
+
+    def test_base_layer_letters(self):
+        layer = _make_minimal_layer()
+        layer[0] = [-1, "KC_Q", "KC_W", "KC_E", "KC_R", "KC_T", "KC_NO"]
+        layer[4] = [-1, "KC_P", "KC_O", "KC_I", "KC_U", "KC_Y", "KC_NO"]
+        pos_map = build_vial_position_map(self._vil([layer]))
+        self.assertEqual(pos_map["KC_Q"], 0)
+        self.assertEqual(pos_map["KC_W"], 1)
+        self.assertEqual(pos_map["KC_T"], 4)
+        # Right half is stored reversed in Vial: col 5→pos5, col 1→pos9
+        self.assertEqual(pos_map["KC_Y"], 5)
+        self.assertEqual(pos_map["KC_P"], 9)
+
+    def test_bottom_row_positions(self):
+        layer = _make_minimal_layer()
+        layer[2] = [-1, "KC_Z", "KC_X", "KC_C", "KC_V", "KC_B", -1]
+        pos_map = build_vial_position_map(self._vil([layer]))
+        self.assertEqual(pos_map["KC_Z"], 21)
+        self.assertEqual(pos_map["KC_X"], 22)
+        self.assertEqual(pos_map["KC_B"], 25)
+
+    def test_thumb_positions(self):
+        layer = _make_minimal_layer()
+        layer[3] = [-1, -1, -1, "MO(2)", "LT4(KC_SPACE)", "MO(5)", -1]
+        layer[7] = [-1, -1, -1, "MO(6)", "MO(1)", "LT3(KC_SPACE)", -1]
+        pos_map = build_vial_position_map(self._vil([layer]))
+        # Left thumbs: col3→32, col4→33, col5→34
+        self.assertEqual(pos_map["MO(2)"], 32)
+        self.assertEqual(pos_map["LT4(KC_SPACE)"], 33)
+        self.assertEqual(pos_map["MO(5)"], 34)
+        # Right thumbs reversed: col5→35, col4→36, col3→37
+        self.assertEqual(pos_map["LT3(KC_SPACE)"], 35)
+        self.assertEqual(pos_map["MO(1)"], 36)
+        self.assertEqual(pos_map["MO(6)"], 37)
+
+    def test_base_layer_takes_priority_over_later_layers(self):
+        """A keycode from the base layer is not overridden if it reappears at a
+        different position in a later layer."""
+        base = _make_minimal_layer()
+        base[0] = [-1, "KC_Q", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "KC_NO"]  # KC_Q at pos 0
+        nav = _make_minimal_layer()
+        nav[1] = [-1, "KC_Q", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "KC_NO"]  # KC_Q at pos 10
+        pos_map = build_vial_position_map(self._vil([base, nav]))
+        # Base layer position 0 should win over nav layer position 10
+        self.assertEqual(pos_map["KC_Q"], 0)
+
+    def test_nav_layer_keys_found_when_absent_from_base(self):
+        base = _make_minimal_layer()
+        nav = _make_minimal_layer()
+        nav[5] = [-1, "KC_BSPACE", "KC_RIGHT", "KC_UP", "KC_DOWN", "KC_LEFT", "KC_NO"]
+        pos_map = build_vial_position_map(self._vil([base, nav]))
+        # Right half row 1, reversed: col5→15, col4→16, col3→17, col2→18, col1→19
+        self.assertEqual(pos_map["KC_LEFT"], 15)
+        self.assertEqual(pos_map["KC_DOWN"], 16)
+        self.assertEqual(pos_map["KC_UP"], 17)
+        self.assertEqual(pos_map["KC_RIGHT"], 18)
+
+
+class TestFormatCombo(unittest.TestCase):
+    def _pos_map(self):
+        # Minimal position map with known positions
+        return {
+            "KC_Q": 0,
+            "KC_W": 1,
+            "RGUI_T(KC_J)": 16,
+            "RALT_T(KC_K)": 17,
+            "RCTL_T(KC_L)": 18,
+            "MO(1)": 36,
+            "MO(2)": 33,
+        }
+
+    def test_simple_two_key_combo(self):
+        combo = ["KC_Q", "KC_W", "KC_NO", "KC_NO", "KC_ESCAPE"]
+        result = format_combo(0, combo, self._pos_map())
+        self.assertIn("left_esc {", result)
+        self.assertIn("bindings = <&kp ESCAPE>;", result)
+        self.assertIn("key-positions = <0 1>;", result)
+
+    def test_three_key_combo_with_timeout(self):
+        combo = ["RGUI_T(KC_J)", "RALT_T(KC_K)", "RCTL_T(KC_L)", "KC_NO", "KC_ENTER"]
+        result = format_combo(2, combo, self._pos_map())
+        self.assertIn("enter {", result)
+        self.assertIn("key-positions = <16 17 18>;", result)
+        self.assertIn("timeout-ms = <100>;", result)
+
+    def test_slow_release_and_layers(self):
+        combo = ["RGUI_T(KC_J)", "RALT_T(KC_K)", "RCTL_T(KC_L)", "KC_NO", "MO(5)"]
+        # Reuse index 7 (mouse_layer) config
+        pos_map = {**self._pos_map(), "LALT_T(KC_D)": 12, "LGUI_T(KC_F)": 13, "LCTL_T(KC_S)": 11}
+        combo7 = ["LALT_T(KC_D)", "LGUI_T(KC_F)", "LCTL_T(KC_S)", "KC_NO", "MO(5)"]
+        result = format_combo(7, combo7, pos_map)
+        self.assertIn("mouse_layer {", result)
+        self.assertIn("slow-release;", result)
+        self.assertIn("layers = <0 2>;", result)
+
+    def test_caps_word_output(self):
+        combo = ["MO(1)", "MO(2)", "KC_NO", "KC_NO", "QK_CAPS_WORD_TOGGLE"]
+        result = format_combo(6, combo, self._pos_map())
+        self.assertIn("caps_word {", result)
+        self.assertIn("bindings = <&caps_word>;", result)
+        self.assertIn("key-positions = <36 33>;", result)
+
+    def test_unknown_trigger_key_raises(self):
+        combo = ["KC_NONEXISTENT", "KC_W", "KC_NO", "KC_NO", "KC_ESCAPE"]
+        with self.assertRaises(ValueError, msg="should raise for unmapped trigger key"):
+            format_combo(0, combo, self._pos_map())
+
+    def test_fallback_name_for_unconfigured_index(self):
+        combo = ["KC_Q", "KC_W", "KC_NO", "KC_NO", "KC_ESCAPE"]
+        result = format_combo(99, combo, self._pos_map())
+        self.assertIn("combo_99 {", result)
+
+
+class TestSpliceCombos(unittest.TestCase):
+    _TEMPLATE = (
+        '/ {\n'
+        '    combos {\n'
+        '        compatible = "zmk,combos";\n'
+        '\n'
+        '        old_combo {\n'
+        '            bindings = <&kp A>;\n'
+        '            key-positions = <0 1>;\n'
+        '        };\n'
+        '    };\n'
+        '\n'
+        '    keymap {\n'
+        '        compatible = "zmk,keymap";\n'
+        '    };\n'
+        '};\n'
+    )
+
+    def test_replaces_combo_content(self):
+        new_content = (
+            '        new_combo {\n'
+            '            bindings = <&kp B>;\n'
+            '            key-positions = <2 3>;\n'
+            '        };'
+        )
+        result = splice_combos(self._TEMPLATE, new_content)
+        self.assertIn("new_combo", result)
+        self.assertNotIn("old_combo", result)
+
+    def test_preserves_surrounding_structure(self):
+        result = splice_combos(self._TEMPLATE, "        x {};\n        y {};")
+        self.assertIn('compatible = "zmk,combos";', result)
+        self.assertIn('compatible = "zmk,keymap";', result)
+
+    def test_raises_when_no_combos_block(self):
+        with self.assertRaises(ValueError):
+            splice_combos("no combos here", "content")
 
 
 if __name__ == "__main__":

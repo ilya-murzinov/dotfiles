@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Sync Vial (.vil) keymap to ZMK Totem (.keymap) format.
 
-Reads the Vial JSON layout and updates the keymap layer bindings in the ZMK
-file, preserving behaviors, combos, and macros.
+Reads the Vial JSON layout and updates the keymap layer bindings and combos
+in the ZMK file, preserving behaviors and macros.
 
 Usage: python3 sync-keymap.py [vial_file] [zmk_file]
 """
@@ -44,6 +44,66 @@ MACROS = {
     14: "&personal_email",
     15: "&work_email",
 }
+
+# Per-combo ZMK properties that can't be derived from Vial.
+# Keys are Vial combo indices; omitted indices use defaults (no timeout/layers).
+COMBO_CONFIG = {
+    0:  {"name": "left_esc"},
+    1:  {"name": "tab"},
+    2:  {"name": "enter", "timeout_ms": 100},
+    3:  {"name": "language_switch", "timeout_ms": 300, "layers": [0, 2]},
+    6:  {"name": "caps_word", "timeout_ms": 100},
+    7:  {"name": "mouse_layer", "slow_release": True, "layers": [0, 2]},
+    8:  {"name": "backspace", "timeout_ms": 100},
+    9:  {"name": "l_word", "timeout_ms": 100, "layers": [2]},
+    10: {"name": "r_word", "layers": [2]},
+}
+
+# ZMK-only combos that have no Vial equivalent (Bluetooth, system reset, etc.).
+_ZMK_ONLY_COMBOS = [
+    {
+        "name": "del_word",
+        "bindings": "<&kp LA(BACKSPACE)>",
+        "key-positions": "<35 16 17>",
+        "layers": "<0 2>",
+    },
+    {
+        "name": "del_word_fw",
+        "bindings": "<&kp LA(DELETE)>",
+        "key-positions": "<17 18 35>",
+        "layers": "<0 2>",
+    },
+    {
+        "name": "bt_clear",
+        "bindings": "<&bt BT_CLR>",
+        "key-positions": "<34 20>",
+        "layers": "<6>",
+    },
+    {
+        "name": "bt_0",
+        "bindings": "<&bt BT_SEL 0>",
+        "key-positions": "<34 21>",
+        "layers": "<6>",
+    },
+    {
+        "name": "bt_1",
+        "bindings": "<&bt BT_SEL 1>",
+        "key-positions": "<34 10>",
+        "layers": "<6>",
+    },
+    {
+        "name": "bt_2",
+        "bindings": "<&bt BT_SEL 2>",
+        "key-positions": "<34 0>",
+        "layers": "<6>",
+    },
+    {
+        "name": "reset",
+        "bindings": "<&sys_reset>",
+        "key-positions": "<34 0 10 21>",
+        "layers": "<6>",
+    },
+]
 
 # ── Keycode tables ────────────────────────────────────────────────────────────
 
@@ -362,6 +422,130 @@ def splice_keymap(zmk_text, layers_text):
     return header + "\n" + layers_text + "\n" + footer
 
 
+# ── Combo syncing ─────────────────────────────────────────────────────────────
+
+
+def build_vial_position_map(vil):
+    """Map each raw Vial keycode to its Totem physical position (0-37).
+
+    Scans all layers in order; earlier layers (lower index) take priority,
+    so base-layer keycodes like LALT_T(KC_D) are preferred over their
+    nav-layer equivalents, while nav-layer-only keycodes like KC_UP are
+    picked up from their first appearance in any layer.
+    """
+    pos_map = {}
+
+    for layer_data in vil["layout"]:
+        left, right = layer_data[:4], layer_data[4:]
+        pos = 0
+
+        def register(code):
+            nonlocal pos
+            if code not in ("KC_NO", "KC_TRNS", -1) and code not in pos_map:
+                pos_map[code] = pos
+            pos += 1
+
+        for row in range(2):
+            for i in range(1, 6):
+                register(left[row][i])
+            for i in range(5, 0, -1):
+                register(right[row][i])
+
+        pos += 1  # position 20: &none (left edge of bottom row)
+        for i in range(1, 6):
+            register(left[2][i])
+        for i in range(5, 0, -1):
+            register(right[2][i])
+        pos += 1  # position 31: &none (right edge of bottom row)
+
+        for i in range(3, 6):
+            register(left[3][i])
+        for i in range(5, 2, -1):
+            register(right[3][i])
+
+    return pos_map
+
+
+def format_combo(idx, vial_combo, pos_map):
+    """Format a single Vial combo entry as a ZMK combo block string."""
+    trigger_keys = [k for k in vial_combo[:4] if k != "KC_NO"]
+    output_key = vial_combo[4]
+
+    positions = []
+    for k in trigger_keys:
+        if k not in pos_map:
+            raise ValueError(f"Combo {idx}: trigger key {k!r} not found in any layer")
+        positions.append(pos_map[k])
+
+    binding = parse_key(output_key, layer=0, pos=0)
+    cfg = COMBO_CONFIG.get(idx, {})
+    name = cfg.get("name", f"combo_{idx}")
+
+    lines = [
+        f"        {name} {{",
+        f"            bindings = <{binding}>;",
+        f"            key-positions = <{' '.join(str(p) for p in positions)}>;",
+    ]
+    if "timeout_ms" in cfg:
+        lines.append(f"            timeout-ms = <{cfg['timeout_ms']}>;")
+    if cfg.get("slow_release"):
+        lines.append(f"            slow-release;")
+    if "layers" in cfg:
+        lines.append(f"            layers = <{' '.join(str(l) for l in cfg['layers'])}>;")
+    lines.append(f"        }};")
+
+    return "\n".join(lines)
+
+
+def format_zmk_only_combo(entry):
+    """Format a ZMK-only combo dict as a combo block string."""
+    lines = [f"        {entry['name']} {{"]
+    lines.append(f"            bindings = {entry['bindings']};")
+    lines.append(f"            key-positions = {entry['key-positions']};")
+    if "timeout-ms" in entry:
+        lines.append(f"            timeout-ms = {entry['timeout-ms']};")
+    if entry.get("slow-release"):
+        lines.append(f"            slow-release;")
+    if "layers" in entry:
+        lines.append(f"            layers = {entry['layers']};")
+    lines.append(f"        }};")
+    return "\n".join(lines)
+
+
+def format_combos(vil):
+    """Generate all ZMK combo block text from Vial combo data + ZMK-only combos."""
+    pos_map = build_vial_position_map(vil)
+
+    blocks = []
+    for idx, combo in enumerate(vil["combo"]):
+        output_key = combo[4]
+        if output_key == "KC_NO":
+            continue
+        trigger_keys = [k for k in combo[:4] if k != "KC_NO"]
+        if not trigger_keys:
+            continue
+        blocks.append(format_combo(idx, combo, pos_map))
+
+    for entry in _ZMK_ONLY_COMBOS:
+        blocks.append(format_zmk_only_combo(entry))
+
+    return "\n\n".join(blocks)
+
+
+def splice_combos(zmk_text, combos_content):
+    """Replace the combos block content in the ZMK file."""
+    pattern = re.compile(
+        r'(    combos \{\n        compatible = "zmk,combos";\n\n)'
+        r'.*?'
+        r'(\n    \};)',
+        re.DOTALL,
+    )
+    m = pattern.search(zmk_text)
+    if not m:
+        raise ValueError("Could not find combos block in ZMK file")
+    return zmk_text[: m.start()] + m.group(1) + combos_content + m.group(2) + zmk_text[m.end():]
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 
@@ -382,8 +566,17 @@ def main():
     layers_text = "\n\n".join(layer_blocks)
     new_text = splice_keymap(zmk_text, layers_text)
 
+    combos_content = format_combos(vil)
+    new_text = splice_combos(new_text, combos_content)
+
     zmk_path.write_text(new_text)
-    print(f"Synced {len(layer_blocks)} layers from {vil_path.name} → {zmk_path.name}")
+    active_combos = sum(
+        1 for c in vil["combo"] if c[4] != "KC_NO" and any(k != "KC_NO" for k in c[:4])
+    )
+    print(
+        f"Synced {len(layer_blocks)} layers + {active_combos} combos"
+        f" from {vil_path.name} → {zmk_path.name}"
+    )
 
 
 if __name__ == "__main__":

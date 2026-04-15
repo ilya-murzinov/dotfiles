@@ -10,6 +10,14 @@ vim.opt.runtimepath:append(vim.fn.expand("~/.vim/after"))
 -- Source your vimrc - vim-plug handles all shared plugins
 vim.cmd("source ~/.vimrc")
 
+-- Override undodir to avoid E824 conflicts with Vim (different undo file formats)
+local undodir = vim.fn.stdpath("data") .. "/undo"
+vim.opt.undodir = undodir
+vim.opt.undofile = true
+if not vim.loop.fs_stat(undodir) then
+  vim.fn.mkdir(undodir, "p")
+end
+
 -- Bootstrap lazy.nvim for nvim-specific plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -25,4 +33,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Load nvim-only plugins via lazy.nvim
-require("plugins")
+-- Don't let lazy.nvim reset runtimepath — it wipes vim-plug plugin dirs
+require("lazy").setup(require("plugins"), {
+  performance = {
+    rtp = { reset = false },
+  },
+})

@@ -182,7 +182,12 @@
 
         left_esc {
             bindings = <&kp ESCAPE>;
-            key-positions = <1 0>;
+            key-positions = <0 1>;
+        };
+
+        tab {
+            bindings = <&kp TAB>;
+            key-positions = <21 22>;
         };
 
         enter {
@@ -191,19 +196,28 @@
             timeout-ms = <100>;
         };
 
-        tab {
-            bindings = <&kp TAB>;
-            key-positions = <21 22>;
+        language_switch {
+            bindings = <&kp LC(SPACE)>;
+            key-positions = <35 34>;
+            timeout-ms = <300>;
+            layers = <0 2>;
         };
 
-        r_word {
-            bindings = <&kp LA(RIGHT)>;
-            key-positions = <18 17>;
-            layers = <2>;
+        caps_word {
+            bindings = <&caps_word>;
+            key-positions = <36 33>;
+            timeout-ms = <100>;
+        };
+
+        mouse_layer {
+            bindings = <&mo 5>;
+            key-positions = <12 13 11>;
+            slow-release;
+            layers = <0 2>;
         };
 
         backspace {
-            bindings = <&kp BACKSPACE>;
+            bindings = <&kp BSPC>;
             key-positions = <18 19>;
             timeout-ms = <100>;
         };
@@ -211,8 +225,14 @@
         l_word {
             bindings = <&kp LA(LEFT)>;
             key-positions = <17 16>;
-            layers = <2>;
             timeout-ms = <100>;
+            layers = <2>;
+        };
+
+        r_word {
+            bindings = <&kp LA(RIGHT)>;
+            key-positions = <17 18>;
+            layers = <2>;
         };
 
         del_word {
@@ -255,26 +275,6 @@
             bindings = <&sys_reset>;
             key-positions = <34 0 10 21>;
             layers = <6>;
-        };
-
-        language_switch {
-            bindings = <&kp LC(SPACE)>;
-            key-positions = <34 35>;
-            timeout-ms = <300>;
-            layers = <0 2>;
-        };
-
-        caps_word {
-            bindings = <&caps_word>;
-            key-positions = <24 27>;
-            timeout-ms = <100>;
-        };
-
-        mouse_layer {
-            bindings = <&mo 5>;
-            key-positions = <12 13 11>;
-            slow-release;
-            layers = <0 2>;
         };
     };
 
