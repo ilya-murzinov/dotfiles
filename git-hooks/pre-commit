@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Blocks staging sensitive-looking content. Bypass (unsafe): git commit --no-verify
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  exit 0
+fi
+
+failed=0
+
+scan_staged() {
+  local f="$1"
+  [[ -z "$f" ]] && return 0
+  if ! git cat-file -e ":$f" 2>/dev/null; then
+    return 0
+  fi
+  local data
+  data=$(git show ":$f" 2>/dev/null) || return 0
+
+  local p
+  for p in \
+    '(^|[^[:alnum:]])[Rr][Ee][Vv][Oo][Ll][Uu][Tt]([^[:alnum:]]|$)' \
+    '[Rr]evolut\.com' \
+    '@[Rr]evolut\.' \
+    '[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd][[:space:]]*[=:][[:space:]]*[^[:space:]]' \
+    '[Aa][Pp][Ii][_-]?[Kk][Ee][Yy][[:space:]]*[=:][[:space:]]*[^[:space:]]' \
+    '[Ss][Ee][Cc][Rr][Ee][Tt][[:space:]]*[=:][[:space:]]*[^[:space:]]' \
+    '[Tt][Oo][Kk][Ee][Nn][[:space:]]*[=:][[:space:]]*[^[:space:]]{12,}' \
+    '[Aa][Uu][Tt][Hh](ORIZATION)?[[:space:]]*:[[:space:]]*[Bb]earer[[:space:]]+[^[:space:]]' \
+    'ATATT3x[A-Za-z0-9_=-]{20,}' \
+    'ghp_[A-Za-z0-9]{36}' \
+    'github_pat_[A-Za-z0-9_]{20,}' \
+    'sk-(live|proj|svcacct)-[A-Za-z0-9_-]{20,}' \
+    'AKIA[0-9A-Z]{16}' \
+    'xox[baprs]-[0-9A-Za-z-]{10,}' \
+    '-----BEGIN.*PRIVATE KEY-----'
+  do
+    if printf '%s\n' "$data" | LC_ALL=C grep -aEq "$p" 2>/dev/null; then
+      echo "${RED}Blocked by pre-commit:${NC} pattern matched in ${YELLOW}${f}${NC}" >&2
+      printf '%s\n' "$data" | LC_ALL=C grep -aEn "$p" 2>/dev/null | head -15 >&2 || true
+      failed=1
+      return 0
+    fi
+  done
+  return 0
+}
+
+while IFS= read -r f || [[ -n "${f:-}" ]]; do
+  [[ -z "${f:-}" ]] && continue
+  scan_staged "$f"
+done < <(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
+
+if [[ "$failed" -ne 0 ]]; then
+  echo "${RED}Commit aborted.${NC} Remove or redact, or ${YELLOW}git commit --no-verify${NC} (unsafe)." >&2
+  exit 1
+fi
+
+exit 0
