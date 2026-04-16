@@ -1,0 +1,4 @@
+#!/bin/sh
+cd "$(dirname "$0")/.." || exit 1
+git config core.hooksPath git-hooks
+echo "Set core.hooksPath to git-hooks (this repo)"
