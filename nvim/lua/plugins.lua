@@ -2,6 +2,36 @@
 -- These load via lazy.nvim after vimrc is sourced
 
 return {
+  -- Which-key: shows available keybindings after pressing leader
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      delay = 300,
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = true })
+        end,
+        desc = "All keybindings",
+      },
+    },
+    config = function(_, opts)
+      require("which-key").setup(opts)
+      require("which-key").add({
+        { "<leader>f", group = "find" },
+        { "<leader>g", group = "git" },
+        { "<leader>s", group = "search" },
+        { "<leader>p", group = "file explorer" },
+        { "<leader>t", group = "tab" },
+        { "<leader>m", group = "markdown/markdown-preview/mouse" },
+        { "<leader>o", group = "obsidian" },
+      })
+    end,
+  },
+
   -- vim-be-good: nvim-only plugin for practicing vim movements
   {
     "ThePrimeagen/vim-be-good",
