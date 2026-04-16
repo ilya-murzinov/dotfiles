@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-nvim link-tmux link-zsh link-iterm2-dynamic-profiles
+	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-iterm2-dynamic-profiles
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -20,6 +20,7 @@ karabiner:
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
+	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
 	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@echo "Removed symlinks."
 
@@ -37,6 +38,11 @@ link-tmux:
 
 link-zsh:
 	ln -sf "$(REPO)/zsh/.zshrc" "$(DEST)/.zshrc"
+
+link-kitty:
+	@mkdir -p "$(DEST)/.config/kitty"
+	ln -sf "$(REPO)/kitty/kitty.conf" "$(DEST)/.config/kitty/kitty.conf"
+	ln -sf "$(REPO)/kitty/catppuccin-mocha.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
 
 link-iterm2-dynamic-profiles:
 	@pgrep -x iTerm2 >/dev/null 2>&1 && (echo "Error: Quit iTerm2 first (Cmd+Q), then run again." && exit 1) || true
