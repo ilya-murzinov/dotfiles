@@ -47,13 +47,14 @@ return {
       "nvim-lua/plenary.nvim",
     },
     keys = {
-      { "<leader>on", "<cmd>Obsidian new<cr>", desc = "New note" },
-      { "<leader>oo", "<cmd>Obsidian quick_switch<cr>", desc = "Quick switch" },
-      { "<leader>os", "<cmd>Obsidian search<cr>", desc = "Search notes" },
-      { "<leader>ot", "<cmd>Obsidian today<cr>", desc = "Today's daily note" },
-      { "<leader>ob", "<cmd>Obsidian backlinks<cr>", desc = "Backlinks" },
-      { "<leader>of", "<cmd>Obsidian follow_link<cr>", desc = "Follow link" },
-      { "<leader>oT", "<cmd>Obsidian template<cr>", desc = "Insert template" },
+      { "<leader>on", "<cmd>Obsidian new<cr>",          desc = "New note" },
+      { "<leader>of", "<cmd>Obsidian quick_switch<cr>", desc = "Find note" },
+      { "<leader>os", "<cmd>Obsidian search<cr>",       desc = "Search notes" },
+      { "<leader>od", "<cmd>Obsidian today<cr>",        desc = "Daily note" },
+      { "<leader>ob", "<cmd>Obsidian backlinks<cr>",    desc = "Backlinks" },
+      { "<leader>ot", "<cmd>Obsidian tags<cr>",         desc = "Tags" },
+      { "<leader>ol", "<cmd>Obsidian follow_link<cr>",  desc = "Follow link" },
+      { "<leader>oi", "<cmd>Obsidian template<cr>",     desc = "Insert template" },
     },
     init = function()
       vim.opt.conceallevel = 2
@@ -71,7 +72,7 @@ return {
           },
         },
         completion = {
-          blink = false,
+          blink = true,
           nvim_cmp = false,
         },
         picker = {
@@ -142,6 +143,24 @@ return {
       })
     end,
   },
+  -- blink.cmp: completion engine (used by obsidian.nvim for [[ link completion)
+  {
+    "saghen/blink.cmp",
+    version = "1.*",
+    opts = {
+      keymap = {
+        preset = "default",
+        ["<Tab>"] = { "accept", "fallback" },
+      },
+      sources = {
+        default = { "lsp", "path", "buffer" },
+        per_filetype = {
+          markdown = { "obsidian", "obsidian_new", "obsidian_tags", "lsp", "path", "buffer" },
+        },
+      },
+    },
+  },
+
   -- fzf-lua: picker backend for obsidian.nvim (and general use)
   {
     "ibhagwan/fzf-lua",
