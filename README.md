@@ -181,17 +181,46 @@ Leader is **Space**. All mappings below are `Space` + key unless noted.
 
 #### Git (fugitive + gitgutter)
 
+**Status buffer** (`:G` or `:Git`):
+
+| Keys | Action |
+|------|--------|
+| `s` | Stage file/hunk under cursor |
+| `u` | Unstage file/hunk |
+| `-` | Toggle stage/unstage |
+| `=` | Toggle inline diff |
+| `cc` | Commit staged |
+| `ca` | Amend last commit |
+| `dd` | Diff file under cursor |
+| `X` | Discard changes |
+| `Enter` | Open file |
+| `q` | Close |
+
+**Commands:**
+
 | Keys / Command | Action |
 |----------------|--------|
-| `:G` | Git status (summary, stage with `-`, open file with `Enter`) |
-| `:G diff` | Diff against index |
-| `:G blame` | Blame current file |
-| `:G commit` | Commit (write buffer to commit, close to abort) |
-| `Space gd` | Show diff of current hunk (gitgutter preview) |
-| `Space gu` | Undo hunk (revert changes on current line/block) |
+| `:G` | Open status buffer |
+| `:Gdiffsplit` | Diff current file (staged vs working) |
+| `:Gdiffsplit HEAD~1` | Diff against ref |
+| `:Git blame` | Blame sidebar (`Enter` → jump to commit, `o` → open in split) |
+| `:Git log --oneline` | Log |
+| `:0Gclog` | File history (navigate with `]q` / `[q`) |
+| `:Gwrite` | `git add %` |
+| `:Gread` | `git checkout %` (revert file) |
+| `:GMove new/path` | Rename/move file |
+| `:GDelete` | Delete file |
+| `:Git push` / `:Git pull` | Push / pull |
+
+**Gitgutter (gutter signs):**
+
+| Keys | Action |
+|------|--------|
+| `Space gd` | Preview hunk diff |
+| `Space gu` | Undo hunk |
 | `Space gn` / `Space gN` | Next / previous hunk |
-| `Space gp` | Close preview window (after `gd`) |
-| Gutter | **vim-gitgutter**: signs in margin for added/modified/deleted lines |
+| `Space gp` | Close preview window |
+| Gutter signs | `+` added, `~` modified, `-` deleted |
 
 #### Misc
 
