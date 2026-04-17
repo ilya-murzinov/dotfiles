@@ -247,6 +247,11 @@ if [[ -f ~/.fzf.zsh ]]; then
   source ~/.fzf.zsh
 fi
 
+alias nv='nvim'
+alias vn='nvim'
+alias vm='nvim'
+alias vim='nvim'
+
 # Attach to tmux only when there is an orphan (unattached) session
 if [[ -z "$TMUX" ]]; then
   orphan=$(tmux list-sessions -F '#{?session_attached,,#{session_name}}' 2>/dev/null | head -1)
