@@ -39,10 +39,9 @@ TAP_DANCES = {
 }
 
 MACROS = {
-    12: "&name",
-    13: "&last_name",
-    14: "&personal_email",
-    15: "&work_email",
+    4: "&name",
+    5: "&last_name",
+    6: "&personal_email",
 }
 
 # Per-combo ZMK properties that can't be derived from Vial.
