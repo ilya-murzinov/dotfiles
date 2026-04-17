@@ -84,6 +84,10 @@ return {
         note_frontmatter = {
           tags = vim.NIL,
         },
+        templates = {
+          folder = "templates",
+          date_format = "%Y-%m-%d",
+        },
       })
 
       local group = vim.api.nvim_create_augroup("obsidian_lsp_ensure", { clear = true })
