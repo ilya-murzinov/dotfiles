@@ -38,11 +38,9 @@ TAP_DANCES = {
     13: "&tilde_td",
 }
 
-MACROS = {
-    4: "&name",
-    5: "&last_name",
-    6: "&personal_email",
-}
+# Auto-populated at runtime by matching Vial macro text against ZMK macro output.
+# No manual updates needed when rearranging macros in Vial.
+MACROS: dict[int, str] = {}
 
 # Per-combo ZMK properties that can't be derived from Vial.
 # Keys are Vial combo indices; omitted indices use defaults (no timeout/layers).
@@ -103,6 +101,113 @@ _ZMK_ONLY_COMBOS = [
         "layers": "<6>",
     },
 ]
+
+# ── Macro auto-detection ──────────────────────────────────────────────────────
+
+# ZMK keycode → character it produces (lowercase; LS(X) produces X.upper())
+_ZMK_KEY_CHAR: dict[str, str] = {
+    **{c: c.lower() for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"},
+    **{f"N{d}": d for d in "0123456789"},
+    "COMMA": ",", "DOT": ".", "SLASH": "/", "FSLH": "/", "SEMI": ";",
+    "SQT": "'", "BACKSLASH": "\\", "LEFT_BRACKET": "[", "RIGHT_BRACKET": "]",
+    "LBKT": "[", "RBKT": "]", "LBRC": "{", "RBRC": "}",
+    "MINUS": "-", "EQUAL": "=", "GRAVE": "`", "SPACE": " ",
+    "AT": "@", "EXCL": "!", "HASH": "#", "DOLLAR": "$", "PERCENT": "%",
+    "CARET": "^", "AMPS": "&", "ASTRK": "*", "STAR": "*",
+    "LPAR": "(", "RPAR": ")", "UNDER": "_", "PLUS": "+",
+    "QUESTION": "?", "PIPE": "|", "TILDE": "~", "DOUBLE_QUOTES": '"',
+    "COLON": ":",
+}
+
+_ZMK_CURSOR_KEYS = {
+    "LEFT", "RIGHT", "UP", "DOWN", "BSPC", "RET", "TAB", "ESCAPE", "HOME", "END",
+}
+
+
+def _decode_zmk_macro(bindings_str: str) -> str | None:
+    """Decode a ZMK macro bindings string to the text it types.
+
+    Returns None for macros with non-text actions (e.g., layer changes).
+    Cursor-movement keys (&kp LEFT etc.) are skipped — they don't produce text.
+    """
+    text = []
+    for part in bindings_str.split("&"):
+        part = part.strip()
+        if not part:
+            continue
+        tokens = part.split()
+        behavior, args = tokens[0], tokens[1:]
+        if behavior != "kp" or not args:
+            return None
+        keycode = args[0]
+        ls_m = re.match(r"^LS\((\w+)\)$", keycode)
+        if ls_m:
+            char = _ZMK_KEY_CHAR.get(ls_m.group(1))
+            if char is None:
+                return None
+            text.append(char.upper())
+        elif keycode in _ZMK_CURSOR_KEYS:
+            pass
+        else:
+            char = _ZMK_KEY_CHAR.get(keycode)
+            if char is None:
+                return None
+            text.append(char)
+    return "".join(text) or None
+
+
+def _parse_zmk_macro_texts(zmk_text: str) -> dict[str, str]:
+    """Parse ZMK keymap for behavior-macro definitions. Returns {name: typed_text}."""
+    result = {}
+    macro_re = re.compile(
+        r"(\w+):\s*\w+\s*\{[^}]*?"
+        r'compatible\s*=\s*"zmk,behavior-macro"[^}]*?'
+        r"bindings\s*=\s*<([^>]*)>",
+        re.DOTALL,
+    )
+    for m in macro_re.finditer(zmk_text):
+        name, bindings = m.group(1), m.group(2).strip()
+        decoded = _decode_zmk_macro(bindings)
+        if decoded:
+            result[name] = decoded
+    return result
+
+
+def _vial_macro_text(actions: list) -> str | None:
+    """Extract the text a Vial macro types. Returns None for non-text macros."""
+    _skip_taps = {"KC_LEFT", "KC_RIGHT", "KC_UP", "KC_DOWN", "KC_BSPACE", "KC_ENTER", "KC_TAB"}
+    text = []
+    for action in actions:
+        kind = action[0]
+        if kind == "text":
+            text.append(action[1])
+        elif kind == "tap":
+            if action[1] not in _skip_taps:
+                return None
+        else:
+            return None
+    return "".join(text) or None
+
+
+def build_macros_map(vil_macros: list, zmk_text: str) -> dict[int, str]:
+    """Auto-detect Vial macro index → ZMK behavior name by matching typed text.
+
+    Decodes both sides to the string they produce and matches on equality.
+    Macros with no text equivalent (non-text actions) are silently skipped.
+    """
+    zmk_name_by_text = {text: name for name, text in _parse_zmk_macro_texts(zmk_text).items()}
+    result = {}
+    for idx, actions in enumerate(vil_macros):
+        if not actions:
+            continue
+        vial_text = _vial_macro_text(actions)
+        if vial_text is None:
+            continue
+        zmk_name = zmk_name_by_text.get(vial_text)
+        if zmk_name:
+            result[idx] = f"&{zmk_name}"
+    return result
+
 
 # ── Keycode tables ────────────────────────────────────────────────────────────
 
@@ -554,6 +659,9 @@ def main():
 
     vil = json.loads(vil_path.read_text())
     zmk_text = zmk_path.read_text()
+
+    MACROS.clear()
+    MACROS.update(build_macros_map(vil.get("macro", []), zmk_text))
 
     layer_blocks = []
     for i, name in enumerate(LAYER_NAMES):

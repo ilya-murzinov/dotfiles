@@ -455,7 +455,7 @@
             bindings = <
        &kp Q              &kp W         &kp E            &kp R            &kp T          &kp Y        &kp U            &kp I             &kp O         &kp P
        &hml LEFT_SHIFT A  &hml LCTRL S  &hml LEFT_ALT D  &hml LEFT_GUI F  &kp G          &kp H        &hmr LEFT_GUI J  &hmr RIGHT_ALT K  &hmr RCTRL L  &hmr RIGHT_SHIFT SEMI
-&none  &kp Z              &kp X         &kp C            &kp V            &kp B          &kp N        &kp M            &kp COMMA         &kp DOT       &apos_quote            &none
+&none  &kp Z              &kp X         &kp C            &kp V            &kp B          &kp N        &kp M            &kp COMMA         &kp DOT       &apos_quote  &none
                                         &mo 7            &mo 2            &lt 4 SPACE    &lt 3 SPACE  &mo 1            &mo 6
             >;
         };
@@ -473,7 +473,7 @@
             bindings = <
        &kp LG(N1)      &kp LG(N2)  &kp LG(N3)                &kp LG(N4)                 &kp LG(N5)    &none     &kp PAGE_DOWN  &kp PAGE_UP  &none      &none
        &kp LEFT_SHIFT  &kp LC(UP)  &kp LC(LEFT)              &kp LC(RIGHT)              &none         &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT  &kp BSPC
-&none  &none           &none       &kp LG(LS(LEFT_BRACKET))  &kp LG(LS(RIGHT_BRACKET))  &none         &none     &none          &none        &none      &none     &none
+&none  &none           &none       &kp LG(LS(LEFT_BRACKET))  &kp LG(LS(RIGHT_BRACKET))  &none         &none     &none          &none        &none      &none  &none
                                    &none                     &none                      &none         &none     &none          &none
             >;
         };
@@ -482,7 +482,7 @@
             bindings = <
        &kp EXCL   &kp AT       &kp HASH       &kp DOLLAR  &kp QUESTION    &kp CARET  &none             &none                        &none      &none
        &kp MINUS  &kp PLUS     &kp SLASH      &kp ASTRK   &kp EQUAL       &none      &kp LEFT_BRACKET  &mt RIGHT_ALT RIGHT_BRACKET  &kp RCTRL  &kp RIGHT_SHIFT
-&none  &kp UNDER  &kp PERCENT  &kp BACKSLASH  &kp AMPS    &kp PIPE        &none      &kp LEFT_BRACE    &kp RIGHT_BRACE              &none      &none            &none
+&none  &kp UNDER  &kp PERCENT  &kp BACKSLASH  &kp AMPS    &kp PIPE        &none      &kp LEFT_BRACE    &kp RIGHT_BRACE              &none      &none  &none
                                &none          &none       &lt 4 SPACE     &none      &mo 6             &none
             >;
         };
@@ -507,10 +507,10 @@
 
         media {
             bindings = <
-       &none                 &none              &kp LG(LS(N3))  &kp LG(LS(N4))         &kp LS(LC(LG(NUMBER_4)))    &none             &kp C_BRIGHTNESS_DEC  &kp C_BRIGHTNESS_INC  &none       &none
-       &kp LG(LA(LC(LEFT)))  &kp LG(LA(LC(F)))  &kp LG(LC(F))   &kp LG(LA(LC(RIGHT)))  &none                       &kp C_PLAY_PAUSE  &kp C_VOL_DN          &kp C_VOLUME_UP       &kp K_MUTE  &none
-&none  &none                 &none              &none           &none                  &none                       &none             &none                 &none                 &none       &none  &none
-                                                &none           &none                  &none                       &none             &none                 &none
+       &none                 &none              &kp LG(LS(N3))  &kp LG(LS(N4))         &none    &none             &kp C_BRIGHTNESS_DEC  &kp C_BRIGHTNESS_INC  &none       &none
+       &kp LG(LA(LC(LEFT)))  &kp LG(LA(LC(F)))  &kp LG(LC(F))   &kp LG(LA(LC(RIGHT)))  &none    &kp C_PLAY_PAUSE  &kp C_VOL_DN          &kp C_VOLUME_UP       &kp K_MUTE  &none
+&none  &none                 &none              &none           &none                  &none    &none             &none                 &none                 &none       &none  &none
+                                                &none           &none                  &none    &none             &none                 &none
             >;
         };
 
@@ -522,5 +522,6 @@
                      &none  &none  &none    &none  &none            &none
             >;
         };
+
     };
 };

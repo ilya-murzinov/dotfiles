@@ -2,6 +2,7 @@
 """Tests for sync-keymap.py — documents the QMK→ZMK mapping behavior."""
 
 import unittest
+import sync_keymap
 from sync_keymap import (
     parse_key,
     extract_layer,
@@ -10,7 +11,11 @@ from sync_keymap import (
     format_combo,
     format_combos,
     splice_combos,
+    build_macros_map,
+    _decode_zmk_macro,
+    _vial_macro_text,
     COMBO_CONFIG,
+    MACROS,
 )
 
 
@@ -100,15 +105,105 @@ class TestParseKeyTapDance(unittest.TestCase):
 
 
 class TestParseKeyMacro(unittest.TestCase):
+    def setUp(self):
+        self._orig = dict(MACROS)
+        MACROS.clear()
+        MACROS.update({4: "&name", 5: "&last_name", 6: "&personal_email"})
+
+    def tearDown(self):
+        MACROS.clear()
+        MACROS.update(self._orig)
+
     def test_known_macros(self):
-        self.assertEqual(parse_key("M12", 0, 0), "&name")
-        self.assertEqual(parse_key("M13", 0, 0), "&last_name")
-        self.assertEqual(parse_key("M14", 0, 0), "&personal_email")
-        self.assertEqual(parse_key("M15", 0, 0), "&work_email")
+        self.assertEqual(parse_key("M4", 0, 0), "&name")
+        self.assertEqual(parse_key("M5", 0, 0), "&last_name")
+        self.assertEqual(parse_key("M6", 0, 0), "&personal_email")
 
     def test_unknown_macro_raises(self):
         with self.assertRaises(ValueError):
             parse_key("M99", 0, 0)
+
+
+class TestDecodeZmkMacro(unittest.TestCase):
+    def test_plain_letters(self):
+        self.assertEqual(_decode_zmk_macro("&kp I &kp L &kp I &kp A"), "ilia")
+
+    def test_shifted_letter(self):
+        self.assertEqual(_decode_zmk_macro("&kp LS(I) &kp L &kp I &kp A"), "Ilia")
+
+    def test_email(self):
+        result = _decode_zmk_macro(
+            "&kp M &kp U &kp R &kp Z &kp N4 &kp N2 &kp AT &kp G &kp M &kp A &kp I &kp L &kp DOT &kp C &kp O &kp M"
+        )
+        self.assertEqual(result, "murz42@gmail.com")
+
+    def test_cursor_keys_skipped(self):
+        self.assertEqual(_decode_zmk_macro("&kp LPAR &kp RPAR &kp LEFT"), "()")
+
+    def test_non_kp_returns_none(self):
+        self.assertIsNone(_decode_zmk_macro("&kp A &mo 1"))
+
+    def test_unknown_keycode_returns_none(self):
+        self.assertIsNone(_decode_zmk_macro("&kp NONEXISTENT"))
+
+    def test_empty_returns_none(self):
+        self.assertIsNone(_decode_zmk_macro(""))
+
+
+class TestVialMacroText(unittest.TestCase):
+    def test_plain_text(self):
+        self.assertEqual(_vial_macro_text([["text", "Ilia"]]), "Ilia")
+
+    def test_text_with_cursor_tap(self):
+        self.assertEqual(_vial_macro_text([["text", "()"], ["tap", "KC_LEFT"]]), "()")
+
+    def test_unknown_tap_returns_none(self):
+        self.assertIsNone(_vial_macro_text([["text", "x"], ["tap", "KC_F1"]]))
+
+    def test_non_text_action_returns_none(self):
+        self.assertIsNone(_vial_macro_text([["delay", 100]]))
+
+    def test_empty_returns_none(self):
+        self.assertIsNone(_vial_macro_text([]))
+
+
+class TestBuildMacrosMap(unittest.TestCase):
+    _ZMK = """
+        name: name {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LS(I) &kp L &kp I &kp A>;
+        };
+        personal_email: personal_email {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp M &kp U &kp R &kp Z &kp N4 &kp N2 &kp AT &kp G &kp M &kp A &kp I &kp L &kp DOT &kp C &kp O &kp M>;
+        };
+    """
+
+    def test_matches_by_text(self):
+        vil_macros = [
+            [],                           # 0: empty
+            [],                           # 1: empty
+            [["text", "Ilia"]],           # 2: matches &name
+            [["text", "murz42@gmail.com"]],  # 3: matches &personal_email
+        ]
+        result = build_macros_map(vil_macros, self._ZMK)
+        self.assertEqual(result, {2: "&name", 3: "&personal_email"})
+
+    def test_skips_empty_macros(self):
+        result = build_macros_map([[], []], self._ZMK)
+        self.assertEqual(result, {})
+
+    def test_skips_unmatched_macros(self):
+        vil_macros = [[["text", "no match here"]]]
+        result = build_macros_map(vil_macros, self._ZMK)
+        self.assertEqual(result, {})
+
+    def test_skips_non_text_macros(self):
+        vil_macros = [[["delay", 100]]]
+        result = build_macros_map(vil_macros, self._ZMK)
+        self.assertEqual(result, {})
 
 
 class TestParseKeyModTap(unittest.TestCase):
