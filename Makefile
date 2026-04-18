@@ -19,14 +19,23 @@ karabiner:
 
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
+	@rm -f "$(DEST)/.vim/core.vim" "$(DEST)/.vim/plugins.vim" "$(DEST)/.vim/mappings.vim" "$(DEST)/.vim/autocmds.vim"
+	@rm -rf "$(DEST)/.vim/plugin-config"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
 	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
 	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@echo "Removed symlinks."
 
 link-vim:
+	@mkdir -p "$(DEST)/.vim"
 	ln -sf "$(REPO)/vim/.vimrc" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.ideavimrc" "$(DEST)/.ideavimrc"
+	ln -sf "$(REPO)/vim/.vim/core.vim" "$(DEST)/.vim/core.vim"
+	ln -sf "$(REPO)/vim/.vim/plugins.vim" "$(DEST)/.vim/plugins.vim"
+	ln -sf "$(REPO)/vim/.vim/mappings.vim" "$(DEST)/.vim/mappings.vim"
+	ln -sf "$(REPO)/vim/.vim/autocmds.vim" "$(DEST)/.vim/autocmds.vim"
+	@rm -rf "$(DEST)/.vim/plugin-config"
+	ln -s "$(REPO)/vim/.vim/plugin-config" "$(DEST)/.vim/plugin-config"
 
 link-nvim:
 	@mkdir -p "$(DEST)/.config/nvim/lua"
