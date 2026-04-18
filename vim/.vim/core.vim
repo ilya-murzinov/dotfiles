@@ -14,7 +14,9 @@ set relativenumber
 set scrolloff=8
 set nowrap
 set colorcolumn=80
-set termguicolors
+if has('termguicolors')
+  set termguicolors
+endif
 set noshowmatch
 set cmdheight=2
 set shortmess+=c

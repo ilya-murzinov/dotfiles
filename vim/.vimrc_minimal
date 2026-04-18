@@ -1,0 +1,4 @@
+source ~/.vim/core.vim
+source ~/.vim/mappings.vim
+
+colorscheme slate

@@ -18,7 +18,7 @@ karabiner:
 	@echo "Karabiner config written to $(DEST)/.config/karabiner/karabiner.json"
 
 uninstall:
-	@rm -f "$(DEST)/.vimrc" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
+	@rm -f "$(DEST)/.vimrc" "$(DEST)/.vimrc_minimal" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
 	@rm -f "$(DEST)/.vim/core.vim" "$(DEST)/.vim/plugins.vim" "$(DEST)/.vim/mappings.vim" "$(DEST)/.vim/autocmds.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
@@ -29,6 +29,7 @@ uninstall:
 link-vim:
 	@mkdir -p "$(DEST)/.vim"
 	ln -sf "$(REPO)/vim/.vimrc" "$(DEST)/.vimrc"
+	ln -sf "$(REPO)/vim/.vimrc_minimal" "$(DEST)/.vimrc_minimal"
 	ln -sf "$(REPO)/vim/.ideavimrc" "$(DEST)/.ideavimrc"
 	ln -sf "$(REPO)/vim/.vim/core.vim" "$(DEST)/.vim/core.vim"
 	ln -sf "$(REPO)/vim/.vim/plugins.vim" "$(DEST)/.vim/plugins.vim"
