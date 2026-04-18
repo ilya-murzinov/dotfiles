@@ -11,6 +11,7 @@ filetype plugin indent on
 " Display
 set number
 set relativenumber
+set numberwidth=5
 set scrolloff=8
 set nowrap
 set colorcolumn=80
