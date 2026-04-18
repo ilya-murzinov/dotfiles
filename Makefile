@@ -5,7 +5,7 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 
-.PHONY: install uninstall karabiner zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
+.PHONY: install uninstall karabiner bundle-minimal zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
 
 install:
 	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-iterm2-dynamic-profiles
@@ -25,6 +25,11 @@ uninstall:
 	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
 	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@echo "Removed symlinks."
+
+bundle-minimal:
+	@cat "$(REPO)/vim/.vim/core.vim" "$(REPO)/vim/.vim/mappings.vim" > "$(REPO)/vim/.vimrc_minimal_standalone"
+	@echo 'colorscheme slate' >> "$(REPO)/vim/.vimrc_minimal_standalone"
+	@echo "Written: $(REPO)/vim/.vimrc_minimal_standalone"
 
 link-vim:
 	@mkdir -p "$(DEST)/.vim"
