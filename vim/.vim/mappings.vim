@@ -50,6 +50,10 @@ function! s:GetTzOffset()
 endfunction
 
 function! InsertDateTime()
+  if !filereadable(s:tz_offset_file)
+    echohl WarningMsg | echo 'No timezone offset set. Use <leader>dst to set one.' | echohl None
+    return
+  endif
   let offset = s:GetTzOffset()
   let saved_tz = $TZ
   let $TZ = 'UTC'
