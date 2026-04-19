@@ -8,7 +8,8 @@ function! s:GlobalSearch() abort
   endif
 endfunction
 
-nnoremap <leader>ff :GFiles<CR>
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fg :GFiles<CR>
 nnoremap <leader>fr :History<CR>
 nnoremap <leader>sg :call <SID>GlobalSearch()<CR>
 vnoremap <leader>sg "hy:Rg <C-r>h<CR>
