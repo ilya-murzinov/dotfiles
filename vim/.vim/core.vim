@@ -1,3 +1,15 @@
+" Timezone bootstrap (needed for iSH/iOS where $TZ is not set)
+if empty($TZ)
+  if filereadable('/etc/timezone')
+    let $TZ = trim(system('cat /etc/timezone'))
+  else
+    let s:_tz = trim(system('readlink /etc/localtime 2>/dev/null'))
+    if s:_tz =~# 'zoneinfo/'
+      let $TZ = substitute(s:_tz, '.*zoneinfo/', '', '')
+    endif
+  endif
+endif
+
 " Leader & basics
 let mapleader = " "
 nmap <space> <Leader>
