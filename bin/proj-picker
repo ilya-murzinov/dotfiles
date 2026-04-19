@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Opens a new tmux window cd'd into a chosen project dir.
+selected=$({ find ~/projects ~/obsidian -mindepth 1 -maxdepth 1 -type d; echo ~/dotfiles; } 2>/dev/null | fzf)
+[[ -z $selected ]] && exit 0
+tmux new-window -c "$selected" -n "$(basename "$selected")"

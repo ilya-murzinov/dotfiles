@@ -5,10 +5,10 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 
-.PHONY: install uninstall karabiner install-plug link-vim-minimal zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
+.PHONY: install uninstall karabiner install-plug link-vim-minimal link-bin zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-iterm2-dynamic-profiles
+	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-iterm2-dynamic-profiles link-bin
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -64,6 +64,11 @@ link-kitty:
 	@mkdir -p "$(DEST)/.config/kitty"
 	ln -sf "$(REPO)/kitty/kitty.conf" "$(DEST)/.config/kitty/kitty.conf"
 	ln -sf "$(REPO)/kitty/catppuccin-mocha.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
+
+link-bin:
+	@mkdir -p "$(DEST)/.local/bin"
+	ln -sf "$(REPO)/bin/tmux-sessionizer" "$(DEST)/.local/bin/tmux-sessionizer"
+	ln -sf "$(REPO)/bin/proj-picker" "$(DEST)/.local/bin/proj-picker"
 
 link-iterm2-dynamic-profiles:
 	@pgrep -x iTerm2 >/dev/null 2>&1 && (echo "Error: Quit iTerm2 first (Cmd+Q), then run again." && exit 1) || true

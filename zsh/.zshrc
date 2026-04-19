@@ -247,6 +247,18 @@ if [[ -f ~/.fzf.zsh ]]; then
   source ~/.fzf.zsh
 fi
 
+# Ctrl+P: cd into a project (fuzzy over ~/projects + ~/dotfiles, depth 1)
+_proj_cd() {
+  local selected
+  selected=$({ find ~/projects ~/obsidian -mindepth 1 -maxdepth 1 -type d; echo ~/dotfiles; } 2>/dev/null | fzf)
+  if [[ -n $selected ]]; then
+    cd "$selected" || return
+    zle reset-prompt
+  fi
+}
+zle -N _proj_cd
+bindkey '^p' _proj_cd
+
 alias nv='nvim'
 alias vn='nvim'
 alias vm='nvim'
