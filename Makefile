@@ -21,7 +21,7 @@ uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.vimrc_minimal" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
 	@rm -f "$(DEST)/.vim/core.vim" "$(DEST)/.vim/plugins.vim" "$(DEST)/.vim/mappings.vim" "$(DEST)/.vim/autocmds.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
-	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
+	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua" "$(DEST)/.config/nvim/lua/setup.lua"
 	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
 	@echo "Removed symlinks."
 
@@ -52,6 +52,7 @@ link-nvim:
 	@mkdir -p "$(DEST)/.config/nvim/lua"
 	ln -sf "$(REPO)/nvim/init.lua" "$(DEST)/.config/nvim/init.lua"
 	ln -sf "$(REPO)/nvim/lua/plugins.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
+	ln -sf "$(REPO)/nvim/lua/setup.lua" "$(DEST)/.config/nvim/lua/setup.lua"
 
 link-tmux:
 	ln -sf "$(REPO)/tmux/.tmux.conf" "$(DEST)/.tmux.conf"

@@ -18,24 +18,21 @@ if not vim.loop.fs_stat(undodir) then
   vim.fn.mkdir(undodir, "p")
 end
 
--- Bootstrap lazy.nvim for nvim-specific plugins
+-- Bootstrap lazy.nvim for blink.cmp (needs version-pinned pre-built Rust binaries)
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
+    "git", "clone", "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
+    "--branch=stable", lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Load nvim-only plugins via lazy.nvim
 -- Don't let lazy.nvim reset runtimepath — it wipes vim-plug plugin dirs
 require("lazy").setup(require("plugins"), {
-  performance = {
-    rtp = { reset = false },
-  },
+  performance = { rtp = { reset = false } },
 })
+
+-- Configure vim-plug-installed lua plugins
+require("setup")

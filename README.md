@@ -45,5 +45,6 @@ Override destination: `make install DEST=/other/home`. Remove symlinks: `make un
 ## Docs
 
 - [Vim](docs/vim.md)
+- [Neovim](docs/nvim.md)
 - [Tmux](docs/tmux.md)
 - [Zsh](docs/zsh.md)
