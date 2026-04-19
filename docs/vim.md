@@ -21,7 +21,7 @@ Leader: **Space**
 | Keys | Action |
 |------|--------|
 | `Space tn` | New tab |
-| `Space tc` | Close tab |
+| `Space tx` | Close tab |
 | `Space th` / `tl` | Previous / next tab |
 
 #### Registers

@@ -41,7 +41,7 @@ Side-by-side diff viewer and file history browser. Best used for PR review: chec
 
 | Keys | Action |
 |------|--------|
-| `Space gr` | Open review vs `origin/master` |
+| `Space gcd` | Open diff vs `origin/master` |
 | `Space gh` | Git history of current file |
 | `Space gq` | Close diffview |
 

@@ -1,6 +1,7 @@
 -- Configuration for vim-plug-installed lua plugins.
 -- Called from init.lua after vimrc (and vim-plug) has been sourced.
 -- Each block is guarded with pcall so a missing plugin never crashes startup.
+--
 
 -- Darken diff highlights so the cursor (#f5e0dc) remains visible against them
 local function apply_diff_highlights()
@@ -41,6 +42,17 @@ setup("fzf-lua", function(fzf) fzf.setup({}) end)
 setup("diffview", function(dv)
   local actions = require("diffview.actions")
   dv.setup({
+    view = {
+      default = {
+        layout = "diff2_horizontal",
+      },
+    },
+    file_panel = {
+      win_config = {
+        position = "top",
+        height = 12,
+      },
+    },
     keymaps = {
       diff1 = {
         { "n", "n",   actions.next_conflict,         { desc = "Next change" } },
@@ -86,7 +98,7 @@ setup("diffview", function(dv)
       },
     },
   })
-  vim.keymap.set("n", "<leader>gr", "<cmd>DiffviewOpen origin/master<cr>", { desc = "Review vs master" })
+  vim.keymap.set("n", "<leader>gcd", "<cmd>DiffviewOpen origin/master<cr>", { desc = "Current diff vs master" })
   vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>",      { desc = "File git history" })
   vim.keymap.set("n", "<leader>gq", "<cmd>DiffviewClose<cr>",              { desc = "Close diffview" })
 end)

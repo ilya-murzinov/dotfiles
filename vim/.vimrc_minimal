@@ -5,6 +5,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
 call plug#end()
 
+set relativenumber
 set updatetime=4000
 set colorcolumn=
 set signcolumn=auto

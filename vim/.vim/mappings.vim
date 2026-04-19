@@ -25,7 +25,7 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 " Tabs
 nnoremap <leader>tn :tabnew<CR>
-nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>tx :tabclose<CR>
 nnoremap <leader>th :tabprevious<CR>
 nnoremap <leader>tl :tabnext<CR>
 
@@ -38,6 +38,12 @@ nnoremap q <Nop>
 nnoremap <leader>q @q
 nnoremap <leader>n /,<CR>lr<CR>
 nnoremap <leader>sq :%s/.*/'&',/<CR>
+
+" Date & time
+function! InsertDateTime()
+  put =strftime('%Y-%m-%d %H:%M:%S %Z')
+endfunction
+nnoremap <leader>dt :call InsertDateTime()<CR>o
 
 " Commentary
 nmap <leader>/ gcc
