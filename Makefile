@@ -8,7 +8,7 @@ REPO := $(CURDIR)
 .PHONY: install uninstall karabiner install-plug link-vim-minimal link-bin zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-iterm2-dynamic-profiles link-bin
+	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-bin
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -23,7 +23,6 @@ uninstall:
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua"
 	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
-	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@echo "Removed symlinks."
 
 install-plug:
@@ -69,18 +68,6 @@ link-bin:
 	@mkdir -p "$(DEST)/.local/bin"
 	ln -sf "$(REPO)/bin/tmux-sessionizer" "$(DEST)/.local/bin/tmux-sessionizer"
 	ln -sf "$(REPO)/bin/proj-picker" "$(DEST)/.local/bin/proj-picker"
-
-link-iterm2-dynamic-profiles:
-	@pgrep -x iTerm2 >/dev/null 2>&1 && (echo "Error: Quit iTerm2 first (Cmd+Q), then run again." && exit 1) || true
-	@mkdir -p "$(REPO)/iterm2/DynamicProfiles"
-	@echo "iTerm2: Clearing old preferences..."
-	@defaults delete com.googlecode.iterm2 LoadPrefsFromCustomFolder 2>/dev/null || true
-	@defaults delete com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || true
-	@ITERM2_SUPPORT="$(DEST)/Library/Application Support/iTerm2"; \
-	ITERM2_DIR="$$ITERM2_SUPPORT/DynamicProfiles"; \
-	rm -rf "$$ITERM2_DIR"; \
-	ln -sf "$(REPO)/iterm2/DynamicProfiles" "$$ITERM2_DIR"; \
-	echo "iTerm2: DynamicProfiles symlinked to $(REPO)/iterm2/DynamicProfiles"
 
 zmk-remote:
 	@git remote get-url zmk-config >/dev/null 2>&1 || git remote add zmk-config git@github.com:ilya-murzinov/zmk-config-totem-stable.git

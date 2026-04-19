@@ -11,7 +11,6 @@ Configs and key mappings. Symlink into `$HOME` via `make install`.
 | `tmux/` | .tmux.conf |
 | `zsh/` | .zshrc |
 | `kitty/` | kitty.conf |
-| `iterm2/` | DynamicProfiles (catppuccin macchiato) |
 | `karabiner/` | TypeScript source → `~/.config/karabiner/karabiner.json` |
 | `bin/` | Scripts (`proj-picker`) |
 | `vial/` | Vial keymaps (.vil) — load in [Vial](https://get.vial.today/) |
@@ -21,7 +20,7 @@ Configs and key mappings. Symlink into `$HOME` via `make install`.
 
 All tools use **Catppuccin** (Mocha/Macchiato):
 
-- **iTerm2/Kitty**: catppuccin macchiato
+- **Kitty**: catppuccin macchiato
 - **tmux**: catppuccin/tmux — macchiato
 - **vim/nvim**: catppuccin — macchiato
 - **zsh**: agnoster prompt with catppuccin palette

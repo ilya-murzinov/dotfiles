@@ -61,4 +61,4 @@ Prefix: **C-s**
 
 ## Notes
 
-- **Shift+Enter** sent as `\e[13;2u` for apps like Claude Code. In iTerm2: Key Mappings → Shift+Enter → Send Escape Sequence → `[13;2u`.
+- **Shift+Enter** sent as `\e[13;2u` for apps like Claude Code.
