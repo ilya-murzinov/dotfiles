@@ -10,14 +10,10 @@ filetype plugin indent on
 
 " Display
 set number
-set relativenumber
-set numberwidth=5
+set numberwidth=4
 set scrolloff=8
 set nowrap
 set colorcolumn=80
-if has('termguicolors')
-  set termguicolors
-endif
 set noshowmatch
 set cmdheight=2
 set shortmess+=c

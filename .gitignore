@@ -4,4 +4,3 @@ __pycache__/
 zsh/.zshrc.local
 .zshrc.local
 nvim.log
-vim/.vimrcm

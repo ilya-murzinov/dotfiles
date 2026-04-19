@@ -1,8 +1,6 @@
-" Mouse toggle
-nnoremap <leader>m :set mouse=<C-r>=&mouse == '' ? 'a' : ''<CR><CR>
-
 " Splits
 nnoremap <leader>v :vsplit<CR>
+nnoremap <leader>s :split<CR>
 
 " Window navigation
 nnoremap <leader>h <C-w>h
@@ -34,12 +32,6 @@ nnoremap <leader>tl :tabnext<CR>
 " Buffers & quit
 nnoremap <leader>w :w<CR>
 nnoremap <leader>qq :q<CR>
-function! ConfirmCloseAllBuffersAndQuit() abort
-  if confirm('Close all buffers and exit Vim?', "&Yes\n&No", 2) == 1
-    silent! execute '1,' . bufnr('$') . 'bdelete'
-    quit
-  endif
-endfunction
 
 " Macros & misc
 nnoremap q <Nop>
