@@ -39,6 +39,13 @@ nnoremap <leader>q @q
 nnoremap <leader>n /,<CR>lr<CR>
 nnoremap <leader>sq :%s/.*/'&',/<CR>
 
+" Commentary
+nmap <leader>/ gcc
+
+" Format
+nnoremap <leader>ft msHmtgggqG`tzt`s
+xnoremap <leader>ft gq
+
 " Visual mode indent
 xnoremap <Tab> >gv
 xnoremap <S-Tab> <gv

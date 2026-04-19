@@ -1,6 +1,10 @@
 source ~/.vim/core.vim
 source ~/.vim/mappings.vim
 
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-commentary'
+call plug#end()
+
 set colorcolumn=
 set conceallevel=0
 set scrolloff=4
@@ -8,3 +12,4 @@ set synmaxcol=200
 set cmdheight=1
 
 autocmd FileType markdown syntax off
+autocmd FileType markdown setlocal textwidth=80

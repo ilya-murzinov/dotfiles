@@ -11,4 +11,5 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-rooter'
+Plug 'tpope/vim-commentary'
 call plug#end()

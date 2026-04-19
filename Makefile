@@ -5,7 +5,7 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 
-.PHONY: install uninstall karabiner link-vim-minimal zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
+.PHONY: install uninstall karabiner install-plug link-vim-minimal zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
 
 install:
 	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-iterm2-dynamic-profiles
@@ -26,11 +26,16 @@ uninstall:
 	@rm -rf "$(DEST)/Library/Application Support/iTerm2/DynamicProfiles"
 	@echo "Removed symlinks."
 
+install-plug:
+	@curl -fLo "$(DEST)/.vim/autoload/plug.vim" --create-dirs \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 link-vim-minimal:
 	@mkdir -p "$(DEST)/.vim"
 	ln -sf "$(REPO)/vim/.vimrcm" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.vim/core.vim" "$(DEST)/.vim/core.vim"
 	ln -sf "$(REPO)/vim/.vim/mappings.vim" "$(DEST)/.vim/mappings.vim"
+	$(MAKE) install-plug
 
 link-vim:
 	@mkdir -p "$(DEST)/.vim"
@@ -43,6 +48,7 @@ link-vim:
 	ln -sf "$(REPO)/vim/.vim/autocmds.vim" "$(DEST)/.vim/autocmds.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	ln -s "$(REPO)/vim/.vim/plugin-config" "$(DEST)/.vim/plugin-config"
+	$(MAKE) install-plug
 
 link-nvim:
 	@mkdir -p "$(DEST)/.config/nvim/lua"

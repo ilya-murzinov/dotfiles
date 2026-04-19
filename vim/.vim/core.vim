@@ -15,6 +15,7 @@ set scrolloff=8
 set nowrap
 set colorcolumn=80
 set noshowmatch
+set signcolumn=yes
 set cmdheight=2
 set shortmess+=c
 set updatetime=50
