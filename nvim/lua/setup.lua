@@ -2,6 +2,17 @@
 -- Called from init.lua after vimrc (and vim-plug) has been sourced.
 -- Each block is guarded with pcall so a missing plugin never crashes startup.
 
+-- Darken diff highlights so the cursor (#f5e0dc) remains visible against them
+local function apply_diff_highlights()
+  vim.api.nvim_set_hl(0, "DiffChange", { bg = "#3d3800" })
+  vim.api.nvim_set_hl(0, "DiffText",   { bg = "#524d00", bold = true })
+end
+apply_diff_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = apply_diff_highlights,
+})
+
 local function setup(name, fn)
   local ok, mod = pcall(require, name)
   if ok then fn(mod) end
@@ -28,8 +39,54 @@ setup("fzf-lua", function(fzf) fzf.setup({}) end)
 
 -- diffview
 setup("diffview", function(dv)
-  dv.setup({})
-  vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen origin/master<cr>", { desc = "Diff vs master" })
+  local actions = require("diffview.actions")
+  dv.setup({
+    keymaps = {
+      diff1 = {
+        { "n", "n",   actions.next_conflict,         { desc = "Next change" } },
+        { "n", "N",   actions.prev_conflict,         { desc = "Prev change" } },
+        { "n", "L",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "H",  actions.select_prev_entry,     { desc = "Prev file" } },
+        { "n", "J",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "K",  actions.select_prev_entry,     { desc = "Prev file" } },
+      },
+      diff2 = {
+        { "n", "n",  function() vim.cmd("norm! ]c") end, { desc = "Next change" } },
+        { "n", "N",  function() vim.cmd("norm! [c") end, { desc = "Prev change" } },
+        { "n", "L",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "H",  actions.select_prev_entry,     { desc = "Prev file" } },
+        { "n", "J",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "K",  actions.select_prev_entry,     { desc = "Prev file" } },
+      },
+      diff3 = {
+        { "n", "n",  function() vim.cmd("norm! ]c") end, { desc = "Next change" } },
+        { "n", "N",  function() vim.cmd("norm! [c") end, { desc = "Prev change" } },
+        { "n", "L",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "H",  actions.select_prev_entry,     { desc = "Prev file" } },
+        { "n", "J",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "K",  actions.select_prev_entry,     { desc = "Prev file" } },
+      },
+      diff4 = {
+        { "n", "n",  function() vim.cmd("norm! ]c") end, { desc = "Next change" } },
+        { "n", "N",  function() vim.cmd("norm! [c") end, { desc = "Prev change" } },
+        { "n", "L",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "H",  actions.select_prev_entry,     { desc = "Prev file" } },
+        { "n", "J",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "K",  actions.select_prev_entry,     { desc = "Prev file" } },
+      },
+      file_panel = {
+        { "n", "L",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "H",  actions.select_prev_entry,     { desc = "Prev file" } },
+        { "n", "J",  actions.select_next_entry,     { desc = "Next file" } },
+        { "n", "K",  actions.select_prev_entry,     { desc = "Prev file" } },
+      },
+      file_history_panel = {
+        { "n", "L",  actions.select_next_entry,     { desc = "Next entry" } },
+        { "n", "H",  actions.select_prev_entry,     { desc = "Prev entry" } },
+      },
+    },
+  })
+  vim.keymap.set("n", "<leader>gr", "<cmd>DiffviewOpen origin/master<cr>", { desc = "Review vs master" })
   vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>",      { desc = "File git history" })
   vim.keymap.set("n", "<leader>gq", "<cmd>DiffviewClose<cr>",              { desc = "Close diffview" })
 end)
