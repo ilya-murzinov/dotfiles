@@ -1,25 +1,21 @@
-// Aligned to vial/corne-keymap-mini.vil (combos, nav, mouse, home row mods)
+// Aligned to vial/corne-keymap.vil (combos, nav, home row mods)
 import {
   ifDevice,
-  ifVar,
   map,
   mapSimultaneous,
   rule,
-  toSetVar,
   writeToProfile,
 } from "karabiner.ts";
 import { capsWord, hrm, holdTapLayer } from "karabiner.ts-greg-mods";
 
 const builtIn = ifDevice({ is_built_in_keyboard: true });
-const navActive = ifVar("nav_layer", 1);
-const mouseActive = ifVar("mouse_layer", 1);
 
 writeToProfile("Default", [
   rule("Remap kes")
     .condition(builtIn)
     .manipulators([map("spacebar", "command").to("spacebar", "control")]),
 
-  // Combos: order and set match corne-keymap-mini.vil
+  // Combos: order and set match corne-keymap.vil
   rule("Combos")
     .condition(builtIn)
     .manipulators([
@@ -28,7 +24,6 @@ writeToProfile("Default", [
       mapSimultaneous(["j", "k", "l"], { key_up_when: "any" }).to(
         "return_or_enter",
       ),
-      mapSimultaneous(["a", "s"], { key_up_when: "any" }).to("tab"),
       mapSimultaneous(["f", "j", "k", "l"], { key_up_when: "any" }).to(
         "return_or_enter",
         "command",
@@ -64,47 +59,12 @@ writeToProfile("Default", [
       map("s").to("up_arrow", "control"),
       map("d").to("left_arrow", "control"),
       map("f").to("right_arrow", "control"),
-      map("c").to("open_bracket", "command"),
-      map("v").to("close_bracket", "command"),
-      map("m").to({
-        key_code: "open_bracket",
-        modifiers: ["command", "shift"],
-      }),
-      map(",").to({
-        key_code: "close_bracket",
-        modifiers: ["command", "shift"],
-      }),
+      map("c").to("open_bracket", ["command", "shift"]),
+      map("v").to("close_bracket", ["command", "shift"]),
     )
     .tappingTerm(300)
     .description("Nav layer")
     .build(),
-
-  // Mouse layer: d+f together (matches Vial combo LALT_T(D)+LGUI_T(F) -> MO(5))
-  rule("Mouse layer")
-    .condition(builtIn)
-    .manipulators([
-      mapSimultaneous(["d", "f"], { key_up_when: "any" })
-        .to(toSetVar("mouse_layer", 1))
-        .toAfterKeyUp(toSetVar("mouse_layer", 0)),
-      map("h")
-        .condition(mouseActive)
-        .toMouseKey({ x: -200, speed_multiplier: 10 }),
-      map("j")
-        .condition(mouseActive)
-        .toMouseKey({ y: 200, speed_multiplier: 10 }),
-      map("k")
-        .condition(mouseActive)
-        .toMouseKey({ y: -200, speed_multiplier: 10 }),
-      map("l")
-        .condition(mouseActive)
-        .toMouseKey({ x: 200, speed_multiplier: 10 }),
-      map("u").condition(mouseActive).toMouseKey({ vertical_wheel: 1 }),
-      map("i").condition(mouseActive).toMouseKey({ vertical_wheel: -1 }),
-      map(",").condition(mouseActive).toMouseKey({ horizontal_wheel: -1 }),
-      map(".").condition(mouseActive).toMouseKey({ horizontal_wheel: 1 }),
-      map("spacebar").condition(mouseActive).toPointingButton("button1"),
-      map("right_command").condition(mouseActive).toPointingButton("button2"),
-    ]),
 
   rule("Disable Cmd+H").manipulators([
     map("h", "command").to("vk_none"),
