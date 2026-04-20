@@ -11,6 +11,6 @@ nnoremap <leader>gpf :Git push --force-with-lease<CR>
 
 augroup fugitive_maps
   autocmd!
-  autocmd FileType fugitive nnoremap <buffer><silent> <leader>gp :Git push<CR>
+  autocmd FileType fugitive nnoremap <buffer><silent> <leader>gp :Git push --set-upstream origin HEAD<CR>
   autocmd FileType fugitive nnoremap <buffer><silent> <leader>sa :Git add -A<CR>
 augroup END
