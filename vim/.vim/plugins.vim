@@ -23,9 +23,5 @@ if has('nvim')
   Plug 'obsidian-nvim/obsidian.nvim'
   Plug 'sindrets/diffview.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-  Plug 'mason-org/mason.nvim'
-  Plug 'mason-org/mason-lspconfig.nvim'
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'mfussenegger/nvim-jdtls'
 endif
 call plug#end()

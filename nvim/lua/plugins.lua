@@ -12,9 +12,9 @@ return {
         ["<Tab>"] = { "accept", "fallback" },
       },
       sources = {
-        default = { "lsp", "path", "buffer" },
+        default = { "path", "buffer" },
         per_filetype = {
-          markdown = { "obsidian", "obsidian_new", "obsidian_tags", "lsp", "path", "buffer" },
+          markdown = { "obsidian", "obsidian_new", "obsidian_tags", "path", "buffer" },
         },
       },
     },

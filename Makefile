@@ -69,6 +69,7 @@ link-bin:
 	@mkdir -p "$(DEST)/.local/bin"
 	ln -sf "$(REPO)/bin/tmux-sessionizer" "$(DEST)/.local/bin/tmux-sessionizer"
 	ln -sf "$(REPO)/bin/proj-picker" "$(DEST)/.local/bin/proj-picker"
+	ln -sf "$(REPO)/bin/tmux-open-in-vim" "$(DEST)/.local/bin/tmux-open-in-vim"
 
 zmk-remote:
 	@git remote get-url zmk-config >/dev/null 2>&1 || git remote add zmk-config git@github.com:ilya-murzinov/zmk-config-totem-stable.git

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+pane=$(tmux display-message -p '#{pane_id}')
+line=$(tmux display-message -p '#{copy_cursor_line}')
+x=$(tmux display-message -p '#{copy_cursor_x}')
+
+s=$x; while [[ $s -gt 0 && "${line:$((s-1)):1}" != ' ' ]]; do ((s--)); done
+e=$x; while [[ $e -lt ${#line} && "${line:$e:1}" != ' ' ]]; do ((e++)); done
+input="${line:$s:$((e-s))}"
+
+[[ -z "$input" ]] && { tmux display-message "no path under cursor"; exit 1; }
+
+file="$input"
+linenum=""
+[[ "$input" =~ ^(.+):([0-9]+)(:[0-9]+)?$ ]] && { file="${BASH_REMATCH[1]}"; linenum="${BASH_REMATCH[2]}"; }
+
+vim_pane=$(tmux list-panes -F "#{pane_id} #{pane_current_command}" | grep -E " (n?vim)$" | head -1 | awk '{print $1}')
+[[ -z "$vim_pane" ]] && { tmux display-message "no vim pane in window"; exit 1; }
+
+tmux send-keys -t "$pane" -X cancel
+
+if [[ -n "$linenum" ]]; then
+    tmux send-keys -t "$vim_pane" Escape ":e +${linenum} ${file}" Enter
+else
+    tmux send-keys -t "$vim_pane" Escape ":e ${file}" Enter
+fi
+tmux select-pane -t "$vim_pane"
