@@ -39,8 +39,9 @@ nnoremap <leader>q @q
 nnoremap <leader>n /,<CR>lr<CR>
 nnoremap <leader>sq :%s/.*/'&',/<CR>
 
-" Obsidian
-nnoremap <leader>ot :call AddObsidianTag()<CR>
+" Tags
+nnoremap <leader>ta :call AddTag()<CR>
+nnoremap <leader>ts :call ShowTags()<CR>
 
 " Date & time
 nnoremap <leader>dd :call InsertDate()<CR>

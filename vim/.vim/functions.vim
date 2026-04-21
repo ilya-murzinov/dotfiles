@@ -66,11 +66,16 @@ function! InsertDateTime()
   put =result
 endfunction
 
-let s:obsidian_tags_cache = []
+let s:tags_cache = []
 
-function! s:CollectObsidianTags()
-  if !empty(s:obsidian_tags_cache)
-    return s:obsidian_tags_cache
+augroup tag_cache
+  autocmd!
+  autocmd BufWritePost *.md let s:tags_cache = []
+augroup END
+
+function! s:CollectTags()
+  if !empty(s:tags_cache)
+    return s:tags_cache
   endif
   let tags = {}
   for f in glob('**/*.md', 0, 1)
@@ -102,16 +107,33 @@ function! s:CollectObsidianTags()
       endwhile
     endfor
   endfor
-  let s:obsidian_tags_cache = sort(keys(tags))
-  return s:obsidian_tags_cache
+  let s:tags_cache = sort(keys(tags))
+  return s:tags_cache
 endfunction
 
-function! ObsidianTagComplete(ArgLead, CmdLine, CursorPos)
-  return filter(copy(s:CollectObsidianTags()), {_, v -> v =~# '^' . a:ArgLead})
+function! TagComplete(ArgLead, CmdLine, CursorPos)
+  return filter(copy(s:CollectTags()), {_, v -> v =~# '^' . a:ArgLead})
 endfunction
 
-function! AddObsidianTag()
-  let tag = input('Tag: ', '', 'customlist,ObsidianTagComplete')
+function! ShowTags()
+  if getline(1) != '---'
+    echohl WarningMsg | echo "No frontmatter found" | echohl None
+    return
+  endif
+  for i in range(2, line('$'))
+    if getline(i) == '---'
+      break
+    endif
+    if getline(i) =~# '^tags:'
+      execute i
+      return
+    endif
+  endfor
+  echohl WarningMsg | echo "No tags in frontmatter" | echohl None
+endfunction
+
+function! AddTag()
+  let tag = input('Tag: ', '', 'customlist,TagComplete')
   if tag == ''
     return
   endif
