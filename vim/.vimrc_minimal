@@ -1,4 +1,5 @@
 source ~/.vim/core.vim
+source ~/.vim/reload.vim
 source ~/.vim/mappings.vim
 
 call plug#begin('~/.vim/plugged')
