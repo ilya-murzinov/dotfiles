@@ -307,6 +307,15 @@ No mappings — runs automatically. Useful because `Space ff` / `Space sg` then 
 
 ---
 
+## Tags (markdown frontmatter)
+
+| Keys | Action |
+|------|--------|
+| `Space ta` | Add tag (completion from all `.md` files in project) |
+| `Space ts` | Jump to `tags:` line in frontmatter |
+
+---
+
 ## markdown-preview.nvim
 
 Live preview in Chrome. Opens a new Chrome window, syncs scroll position with cursor.
