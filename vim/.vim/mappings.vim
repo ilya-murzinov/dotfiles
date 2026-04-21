@@ -42,7 +42,7 @@ nnoremap <leader>sq :%s/.*/'&',/<CR>
 " Date & time
 nnoremap <leader>dd :call InsertDate()<CR>
 nnoremap <leader>dt :call InsertDateTime()<CR>o
-nnoremap <leader>dst :call SetTzOffset()<CR>
+nnoremap <leader>do :call SetTzOffset()<CR>
 
 " Reload config
 nnoremap <leader>rc :call ReloadConfig()<CR>

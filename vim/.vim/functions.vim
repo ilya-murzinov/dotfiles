@@ -1,3 +1,36 @@
+let s:git_dirty_cache = {}
+
+function! StatusGitBranch()
+  return exists('*FugitiveHead') ? FugitiveHead() : ''
+endfunction
+
+function! StatusGitDirty()
+  let root = exists('*FugitiveWorkTree') ? FugitiveWorkTree() : ''
+  return root != '' ? get(s:git_dirty_cache, root, '') : ''
+endfunction
+
+function! s:UpdateGitDirty()
+  let root = exists('*FugitiveWorkTree') ? FugitiveWorkTree() : ''
+  if root == ''
+    return
+  endif
+  let output = system('git -C ' . shellescape(root) . ' status --porcelain 2>/dev/null')
+  let s:git_dirty_cache[root] = output != '' ? '  +' : '  ='
+  redrawstatus!
+endfunction
+
+augroup git_dirty_status
+  autocmd!
+  autocmd BufEnter,BufWritePost,FocusGained,ShellCmdPost * call s:UpdateGitDirty()
+augroup END
+
+function! StatusRootDir()
+  if exists('*FugitiveWorkTree') && FugitiveWorkTree() != ''
+    return fnamemodify(FugitiveWorkTree(), ':t')
+  endif
+  return fnamemodify(getcwd(), ':t')
+endfunction
+
 let s:tz_offset_file = expand('~/.vim/tz_offset')
 
 function! s:GetTzOffset()
@@ -34,11 +67,21 @@ function! InsertDateTime()
 endfunction
 
 function! SetTzOffset()
-  let current = s:GetTzOffset()
-  let input = input('UTC offset (e.g. +2, -5) [current: ' . (current >= 0 ? '+' : '') . current . ']: ')
+  let input = input('Current hour (0-23): ')
   if input == ''
     return
   endif
-  call writefile([string(str2nr(input))], s:tz_offset_file)
-  echo "\nTimezone offset saved: UTC" . (str2nr(input) >= 0 ? '+' : '') . str2nr(input)
+  let local_hour = str2nr(input)
+  let saved_tz = $TZ
+  let $TZ = 'UTC'
+  let utc_hour = str2nr(strftime('%H'))
+  let $TZ = saved_tz
+  let offset = local_hour - utc_hour
+  if offset > 12
+    let offset = offset - 24
+  elseif offset < -12
+    let offset = offset + 24
+  endif
+  call writefile([string(offset)], s:tz_offset_file)
+  echo "\nOffset set: UTC" . (offset >= 0 ? '+' : '') . offset
 endfunction
