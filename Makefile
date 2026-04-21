@@ -33,6 +33,7 @@ link-vim-minimal:
 	@mkdir -p "$(DEST)/.vim"
 	ln -sf "$(REPO)/vim/.vimrc_minimal" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.vim/core.vim" "$(DEST)/.vim/core.vim"
+	ln -sf "$(REPO)/vim/.vim/reload.vim" "$(DEST)/.vim/reload.vim"
 	ln -sf "$(REPO)/vim/.vim/mappings.vim" "$(DEST)/.vim/mappings.vim"
 	$(MAKE) install-plug
 
