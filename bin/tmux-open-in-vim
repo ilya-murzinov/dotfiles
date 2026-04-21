@@ -2,12 +2,20 @@
 set -euo pipefail
 
 pane=$(tmux display-message -p '#{pane_id}')
-line=$(tmux display-message -p '#{copy_cursor_line}')
-x=$(tmux display-message -p '#{copy_cursor_x}')
+selection_present=$(tmux display-message -p '#{selection_present}')
 
-s=$x; while [[ $s -gt 0 && "${line:$((s-1)):1}" != ' ' ]]; do ((s--)); done
-e=$x; while [[ $e -lt ${#line} && "${line:$e:1}" != ' ' ]]; do ((e++)); done
-input="${line:$s:$((e-s))}"
+if [[ "$selection_present" == "1" ]]; then
+    tmux send-keys -t "$pane" -X copy-selection-no-clear
+    input=$(tmux save-buffer -)
+else
+    line=$(tmux display-message -p '#{copy_cursor_line}')
+    x=$(tmux display-message -p '#{copy_cursor_x}')
+
+    s=$x; while [[ $s -gt 0 && "${line:$((s-1)):1}" != ' ' ]]; do ((s--)); done
+    e=$x; while [[ $e -lt ${#line} && "${line:$e:1}" != ' ' ]]; do ((e++)); done
+    input="${line:$s:$((e-s))}"
+    input=$(sed 's/[].,;)>]*$//' <<< "$input")
+fi
 
 [[ -z "$input" ]] && { tmux display-message "no path under cursor"; exit 1; }
 
