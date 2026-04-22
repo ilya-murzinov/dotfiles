@@ -12,6 +12,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
 
 " Nvim-only (lua plugins — configured in nvim/lua/setup.lua)
 if has('nvim')

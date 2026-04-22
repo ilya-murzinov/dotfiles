@@ -5,7 +5,7 @@ nnoremap <leader>gdp :GitGutterPrevHunk<CR>
 nnoremap <leader>ga :Git blame --date=short --abbrev=6<CR>
 nnoremap <leader>gc :Git<CR>
 
-nnoremap <leader>gl  :Gclog -100 --pretty=format:\%h\%x20\%x7c\%x20\%as\%x20\%x7c\%x20\%an\%x20\%x7c\%x20\%s<CR>
+nnoremap <leader>gl  :Gclog -100<CR>
 nnoremap <leader>gf  :Git pull<CR>
 
 augroup fugitive_maps

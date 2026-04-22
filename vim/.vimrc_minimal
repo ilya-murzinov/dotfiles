@@ -5,7 +5,10 @@ source ~/.vim/mappings.vim
 
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
 call plug#end()
+
+source ~/.vim/plugin-config/easymotion.vim
 
 set relativenumber
 set updatetime=4000

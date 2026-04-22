@@ -8,6 +8,7 @@ source ~/.vim/plugin-config/fzf.vim
 source ~/.vim/plugin-config/markdown-preview.vim
 source ~/.vim/plugin-config/rooter.vim
 source ~/.vim/plugin-config/undotree.vim
+source ~/.vim/plugin-config/easymotion.vim
 
 source ~/.vim/reload.vim
 source ~/.vim/functions.vim
