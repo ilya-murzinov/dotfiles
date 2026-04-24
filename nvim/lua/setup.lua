@@ -125,6 +125,9 @@ setup("nvim-treesitter.configs", function(ts)
   })
 end)
 
+-- pq (SQL scratch buffer via Postico favorites)
+setup("pq", function(pq) pq.setup() end)
+
 -- obsidian.nvim
 setup("obsidian", function(obsidian)
   vim.opt.conceallevel = 2

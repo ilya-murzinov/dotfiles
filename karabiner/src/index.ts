@@ -61,6 +61,11 @@ writeToProfile("Default", [
       map("f").to("right_arrow", "control"),
       map("c").to("open_bracket", ["command", "shift"]),
       map("v").to("close_bracket", ["command", "shift"]),
+      map("q").to("q", "option"),
+      map("w").to("w", "option"),
+      map("e").to("e", "option"),
+      map("r").to("r", "option"),
+      map("t").to("t", "option"),
     )
     .tappingTerm(300)
     .description("Nav layer")

@@ -5,10 +5,10 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 
-.PHONY: install uninstall karabiner install-plug link-vim-minimal link-bin zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
+.PHONY: install uninstall karabiner install-plug link-vim-minimal link-bin link-aerospace zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
 
 install:
-	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-bin
+	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-bin link-aerospace
 	@echo "Done. Linked dotfiles from $(REPO) to $(DEST)"
 
 karabiner:
@@ -18,7 +18,7 @@ karabiner:
 	@echo "Karabiner config written to $(DEST)/.config/karabiner/karabiner.json"
 
 uninstall:
-	@rm -f "$(DEST)/.vimrc" "$(DEST)/.vimrc_minimal" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc"
+	@rm -f "$(DEST)/.vimrc" "$(DEST)/.vimrc_minimal" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc" "$(DEST)/.aerospace.toml"
 	@rm -f "$(DEST)/.vim/core.vim" "$(DEST)/.vim/plugins.vim" "$(DEST)/.vim/mappings.vim" "$(DEST)/.vim/autocmds.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua" "$(DEST)/.config/nvim/lua/setup.lua"
@@ -66,6 +66,9 @@ link-kitty:
 	@mkdir -p "$(DEST)/.config/kitty"
 	ln -sf "$(REPO)/kitty/kitty.conf" "$(DEST)/.config/kitty/kitty.conf"
 	ln -sf "$(REPO)/kitty/catppuccin-mocha.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
+
+link-aerospace:
+	ln -sf "$(REPO)/aerospace/.aerospace.toml" "$(DEST)/.aerospace.toml"
 
 link-bin:
 	@mkdir -p "$(DEST)/.local/bin"
