@@ -13,6 +13,12 @@ nnoremap <leader>k <C-w>k
 nnoremap <leader>l <C-w>l
 nnoremap <leader>e :Ex<CR>
 
+" Navigation
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzz
+nnoremap N Nzz
+
 " Registers & edit
 nnoremap x "_x
 nnoremap <leader>a "a

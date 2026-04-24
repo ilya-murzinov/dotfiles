@@ -73,5 +73,3 @@ set background=dark
 
 set laststatus=2
 set statusline=\ %{StatusGitBranch()}%{StatusGitDirty()}\ \|\ %<%f\ %m%=\ %{StatusRootDir().'\ '}
-
-let g:netrw_keepdir = 0
