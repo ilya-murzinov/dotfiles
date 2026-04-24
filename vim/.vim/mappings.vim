@@ -3,17 +3,11 @@ nnoremap <M-/> :Commentary<CR>
 xnoremap <M-/> :Commentary<CR>
 
 " Splits
-nnoremap <leader>v :vsplit<CR>
+nnoremap <leader>wv :vsplit<CR>
 nnoremap <leader>s :split<CR>
 
-" Window navigation
-nnoremap <leader>h <C-w>h
-nnoremap <leader>j <C-w>j
-nnoremap <leader>k <C-w>k
-nnoremap <leader>l <C-w>l
-nnoremap <leader>e :Ex<CR>
-
 " Navigation
+nnoremap <leader>e :Ex<CR>
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 nnoremap n nzz
@@ -21,10 +15,15 @@ nnoremap N Nzz
 
 " Registers & edit
 nnoremap x "_x
-nnoremap <leader>a "a
-nnoremap <leader>s "s
-nnoremap <leader>d "d
-nnoremap <leader>r :reg "" "a "s "d<CR>
+vnoremap <leader>ya "ay
+vnoremap <leader>ys "sy
+vnoremap <leader>yd "dy
+vnoremap <leader>yf "fy
+nnoremap <leader>pa "ap
+nnoremap <leader>ps "sp
+nnoremap <leader>pd "dp
+nnoremap <leader>pf "fp
+nnoremap <leader>rs :reg "" "a "s "d<CR>
 
 " Search & replace visual selection
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>

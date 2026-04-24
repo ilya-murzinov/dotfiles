@@ -6,7 +6,7 @@ nnoremap <leader>ga :Git blame --date=short --abbrev=6<CR>
 nnoremap <leader>gc :Git<CR>
 
 nnoremap <leader>gl  :Gclog -100<CR>
-nnoremap <leader>gf  :Git pull<CR>
+nnoremap <leader>gf  :Git pull --rebase<CR>
 
 augroup fugitive_maps
   autocmd!
