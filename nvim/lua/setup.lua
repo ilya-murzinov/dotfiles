@@ -21,21 +21,31 @@ end
 
 -- which-key
 setup("which-key", function(wk)
-  wk.setup({ delay = 300 })
+  wk.setup({
+    delay = 300,
+    preset = false,
+    triggers = {
+      { '"', mode = { "n", "v" } },
+      { "'", mode = { "n", "v", "o" } },
+      { "`", mode = { "n", "v", "o" } },
+    },
+  })
   wk.add({
     { "<leader>?", function() wk.show({ global = true }) end, desc = "All keybindings" },
-    { "<leader>f", group = "find" },
-    { "<leader>g", group = "git" },
-    { "<leader>s", group = "search" },
-    { "<leader>p", group = "file explorer" },
-    { "<leader>t", group = "tab" },
-    { "<leader>m", group = "markdown/markdown-preview/mouse" },
-    { "<leader>o", group = "obsidian" },
   })
 end)
 
--- fzf-lua
-setup("fzf-lua", function(fzf) fzf.setup({}) end)
+-- telescope
+setup("telescope", function(ts)
+  ts.setup({})
+  local b = require("telescope.builtin")
+  vim.keymap.set("n", "<leader>ff", b.find_files,  { desc = "Find files" })
+  vim.keymap.set("n", "<leader>fg", b.git_files,   { desc = "Git files" })
+  vim.keymap.set("n", "<leader>fr", b.oldfiles,    { desc = "Recent files" })
+  vim.keymap.set("n", "<leader>fb", b.buffers,     { desc = "Buffers" })
+  vim.keymap.set("n", "<leader>sg", b.live_grep,   { desc = "Live grep" })
+  vim.keymap.set("n", "<leader>sw", b.grep_string, { desc = "Grep word" })
+end)
 
 -- diffview
 setup("diffview", function(dv)
@@ -134,7 +144,6 @@ setup("obsidian", function(obsidian)
       blink = true,
       nvim_cmp = false,
     },
-    picker = { name = "fzf-lua" },
     note_id_func = function(title)
       return title ~= nil and title:gsub(" ", "-"):lower() or tostring(os.time())
     end,
@@ -142,6 +151,10 @@ setup("obsidian", function(obsidian)
     templates = {
       folder = "templates",
       date_format = "%Y-%m-%d",
+    },
+    daily_notes = {
+      folder = "daily",
+      date_format = "YYYY-MM-DD",
     },
   })
 

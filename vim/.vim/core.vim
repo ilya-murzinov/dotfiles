@@ -22,6 +22,7 @@ filetype plugin indent on
 
 " Display
 set number
+set relativenumber
 set numberwidth=5
 set scrolloff=8
 set nowrap
@@ -45,9 +46,9 @@ set noswapfile
 set nobackup
 
 " Indent & tabs
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set smartindent
 
@@ -72,3 +73,5 @@ set background=dark
 
 set laststatus=2
 set statusline=\ %{StatusGitBranch()}%{StatusGitDirty()}\ \|\ %<%f\ %m%=\ %{StatusRootDir().'\ '}
+
+let g:netrw_keepdir = 0

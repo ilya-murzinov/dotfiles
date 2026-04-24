@@ -25,6 +25,11 @@ augroup checktime_track_file
   autocmd FocusGained,BufEnter * if expand('%') != '' | checktime | endif
 augroup END
 
+augroup markdown_indent
+  autocmd!
+  autocmd FileType markdown setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+augroup END
+
 augroup autosave
   autocmd!
   autocmd InsertLeave,TextChanged,FocusLost * if expand('%') != '' && &buftype == '' && !&readonly && &modifiable | silent! write | endif
