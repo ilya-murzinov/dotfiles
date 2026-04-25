@@ -20,6 +20,7 @@ karabiner:
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.vimrc_minimal" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc" "$(DEST)/.aerospace.toml"
 	@rm -f "$(DEST)/.vim/core.vim" "$(DEST)/.vim/plugins.vim" "$(DEST)/.vim/mappings.vim" "$(DEST)/.vim/autocmds.vim"
+	@rm -f "$(DEST)/.vim/after/plugin/navigation.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua" "$(DEST)/.config/nvim/lua/setup.lua"
 	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
@@ -39,17 +40,18 @@ link-vim-minimal:
 	$(MAKE) install-plug
 
 link-vim:
-	@mkdir -p "$(DEST)/.vim"
+	@mkdir -p "$(DEST)/.vim" "$(DEST)/.vim/after/plugin"
 	ln -sf "$(REPO)/vim/.vimrc" "$(DEST)/.vimrc"
 	ln -sf "$(REPO)/vim/.ideavimrc" "$(DEST)/.ideavimrc"
 	ln -sf "$(REPO)/vim/.vim/reload.vim" "$(DEST)/.vim/reload.vim"
 	ln -sf "$(REPO)/vim/.vim/functions.vim" "$(DEST)/.vim/functions.vim"
-	ln -sf "$(REPO)/vim/.vim/core.vim" "$(DEST)/.vim/core.vi"
+	ln -sf "$(REPO)/vim/.vim/core.vim" "$(DEST)/.vim/core.vim"
 	ln -sf "$(REPO)/vim/.vim/plugins.vim" "$(DEST)/.vim/plugins.vim"
 	ln -sf "$(REPO)/vim/.vim/mappings.vim" "$(DEST)/.vim/mappings.vim"
 	ln -sf "$(REPO)/vim/.vim/autocmds.vim" "$(DEST)/.vim/autocmds.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	ln -s "$(REPO)/vim/.vim/plugin-config" "$(DEST)/.vim/plugin-config"
+	ln -sf "$(REPO)/vim/.vim/after/plugin/navigation.vim" "$(DEST)/.vim/after/plugin/navigation.vim"
 	$(MAKE) install-plug
 
 link-nvim:
