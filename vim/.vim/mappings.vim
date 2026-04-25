@@ -4,7 +4,11 @@ xnoremap <M-/> :Commentary<CR>
 
 " Splits
 nnoremap <leader>wv :vsplit<CR>
-nnoremap <leader>s :split<CR>
+nnoremap <leader>ws :split<CR>
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " Navigation
 nnoremap <leader>e :Ex<CR>
