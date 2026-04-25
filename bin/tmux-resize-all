@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+tmux list-windows -a -F '#{window_id}' | while IFS= read -r w; do
+    tmux resize-window -A -t "$w"
+done
