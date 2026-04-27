@@ -10,8 +10,8 @@
 //
 // ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1800
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 45
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2800
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 30
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/backlight.h>
