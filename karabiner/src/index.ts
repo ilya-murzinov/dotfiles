@@ -74,7 +74,6 @@ writeToProfile("Default", [
   rule("Disable Cmd+H").manipulators([
     map("h", "command").to("vk_none"),
     map("m", "command").to("vk_none"),
-    map("h", "option").to("vk_none"),
   ]),
 
   capsWord()
