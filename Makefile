@@ -5,7 +5,7 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 
-.PHONY: install uninstall karabiner install-plug link-vim-minimal link-bin link-aerospace zmk-add zmk-pull zmk-push zmk-force-push zmk-sync keymap-drawer-deps keymap-viz
+.PHONY: install uninstall karabiner install-plug link-vim-minimal link-bin link-aerospace zmk-add zmk-pull zmk-push zmk-force-push zmk-sync zmk-piantor-add zmk-piantor-pull zmk-piantor-push zmk-piantor-force-push keymap-drawer-deps keymap-viz
 
 install:
 	$(MAKE) link-vim link-nvim link-tmux link-zsh link-kitty link-bin link-aerospace
@@ -101,4 +101,23 @@ zmk-force-push: zmk-remote
 
 zmk-sync:
 	python3 sync_keymap.py
+
+zmk-piantor-remote:
+	@git remote get-url zmk-piantor-config >/dev/null 2>&1 || git remote add zmk-piantor-config git@github.com:ilia-murzinov/zmk-config.git
+
+zmk-piantor-add: zmk-piantor-remote
+	@echo "Fetching zmk-piantor-config..."
+	@git fetch zmk-piantor-config main
+	git subtree add --prefix=zmk-piantor zmk-piantor-config main --squash
+
+zmk-piantor-pull: zmk-piantor-remote
+	git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash
+
+zmk-piantor-push: zmk-piantor-remote
+	git subtree push --prefix=zmk-piantor zmk-piantor-config main
+
+zmk-piantor-force-push: zmk-piantor-remote
+	git subtree split --prefix=zmk-piantor -b zmk-piantor-split-tmp
+	git push zmk-piantor-config zmk-piantor-split-tmp:main --force
+	git branch -D zmk-piantor-split-tmp
 
