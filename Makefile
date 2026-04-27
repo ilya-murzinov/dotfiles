@@ -115,7 +115,7 @@ zmk-piantor-pull: zmk-piantor-remote
 	@git rebase --abort >/dev/null 2>&1 || true
 	@git cherry-pick --abort >/dev/null 2>&1 || true
 	@git fetch zmk-piantor-config main
-	git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash -X theirs
+	git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash
 
 zmk-piantor-push: zmk-piantor-remote
 	git subtree push --prefix=zmk-piantor zmk-piantor-config main
