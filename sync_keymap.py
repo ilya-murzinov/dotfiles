@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Sync Vial (.vil) keymap to ZMK Totem (.keymap) format.
+"""Sync Vial (.vil) keymap to ZMK Totem and Piantor (5×5 Corne-style) keymaps.
 
-Reads the Vial JSON layout and updates the keymap layer bindings and combos
-in the ZMK file, preserving behaviors and macros.
+Reads the Vial JSON layout and updates layer bindings and combos in
+totem.keymap and zmk-piantor/config/piantor_pro_bt.keymap, preserving behaviors
+and macros. Piantor omits Totem’s bottom-row &none padding; ZMK-only combo
+positions are translated, except bt_clear (kept <32 35> to avoid a clash with
+bt_0 on 5-col boards).
 
-Usage: python3 sync-keymap.py [vial_file] [zmk_file]
+Usage: python3 sync_keymap.py [vial_file] [zmk_path]
 """
 
 import json
@@ -15,6 +18,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 VIL_DEFAULT = REPO / "vial" / "corne-keymap.vil"
 ZMK_DEFAULT = REPO / "zmk" / "config" / "totem.keymap"
+# Same logical layout as Totem; physical layout 5+5 / 3 thumb pairs (Vial / Corne)
+PIANTOR_KEYMAP = REPO / "zmk-piantor" / "config" / "piantor_pro_bt.keymap"
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 # Update these when adding new layers, tap dances, or macros.
@@ -101,6 +106,12 @@ _ZMK_ONLY_COMBOS = [
         "layers": "<6>",
     },
 ]
+
+# Piantor: Totem <34 20> and <34 21> would both end up on <32 20>; use a distinct
+# chord (BT clear). Other entries use translate_totem_to_piantor_key_positions.
+_ZMK_ONLY_COMBOS_PIANTOR_OVERRIDES = {
+    "bt_clear": {"key-positions": "<32 35>"},
+}
 
 # ── Macro auto-detection ──────────────────────────────────────────────────────
 
@@ -501,6 +512,77 @@ def format_layer(name, keys):
     ])
 
 
+def totem_38_to_piantor_36(keys: list) -> list:
+    """Drop Totem bottom-row padding keys (indices 20 and 31)."""
+    if len(keys) != 38:
+        raise ValueError(f"expected 38 Totem keys, got {len(keys)}")
+    return keys[0:20] + keys[21:31] + keys[32:38]
+
+
+def translate_totem_to_piantor_key_positions(angles: str) -> str:
+    """Map Totem physical indices (0–37) to Piantor 5×5+3 (0–35)."""
+    m = re.search(r"<\s*([\d\s]+)\s*>", angles.strip())
+    if not m:
+        raise ValueError(f"expected <…> in {angles!r}")
+
+    def map_pos(p: int) -> int:
+        if p < 20:
+            return p
+        if p == 20:
+            return 20
+        if 21 <= p <= 30:
+            return p - 1
+        if p == 31:
+            return 29
+        if 32 <= p <= 37:
+            return p - 2
+        raise ValueError(f"invalid Totem key position {p}")
+
+    parts = m.group(1).split()
+    return "<" + " ".join(str(map_pos(int(x))) for x in parts) + ">"
+
+
+def format_layer_piantor(name, keys_38):
+    """36-key Corne-style row (no bottom &none padding) matching five_col ZMK order."""
+    k = totem_38_to_piantor_36(keys_38)
+    col_keys = {i: [] for i in range(10)}
+    for row_keys in (k[0:10], k[10:20], k[20:30]):
+        for i, key in enumerate(row_keys):
+            col_keys[i].append(key)
+    for i, key in enumerate(k[30:33]):
+        col_keys[i + 2].append(key)
+    for i, key in enumerate(k[33:36]):
+        col_keys[i + 5].append(key)
+    widths = {i: max((len(x) for x in col_keys[i]), default=0) for i in range(10)}
+
+    sep = "    "
+    prefix = " " * 7
+
+    def fmt(key_list, col_start, pad_last=False):
+        parts = []
+        for j, key in enumerate(key_list):
+            col = col_start + j
+            if j < len(key_list) - 1 or pad_last:
+                parts.append(key.ljust(widths[col]))
+            else:
+                parts.append(key)
+        return "  ".join(parts)
+
+    r0 = f"{prefix}{fmt(k[0:5], 0, pad_last=True)}{sep}{fmt(k[5:10], 5)}"
+    r1 = f"{prefix}{fmt(k[10:15], 0, pad_last=True)}{sep}{fmt(k[15:20], 5)}"
+    r2 = f"{prefix}{fmt(k[20:25], 0, pad_last=True)}{sep}{fmt(k[25:30], 5)}"
+    thumb_offset = len(prefix) + widths[0] + 2 + widths[1] + 2
+    r3 = f"{' ' * thumb_offset}{fmt(k[30:33], 2, pad_last=True)}{sep}{fmt(k[33:36], 5)}"
+
+    return "\n".join([
+        f"        {name} {{",
+        f"            bindings = <",
+        r0, r1, r2, r3,
+        f"            >;",
+        f"        }};",
+    ])
+
+
 # ── File splicing ─────────────────────────────────────────────────────────────
 
 
@@ -636,6 +718,71 @@ def format_combos(vil):
     return "\n\n".join(blocks)
 
 
+def build_vial_position_map_piantor(vil):
+    """Map Vial keycodes to Piantor physical order (0–35; no Totem &none padding)."""
+    pos_map = {}
+
+    for layer_data in vil["layout"]:
+        left, right = layer_data[:4], layer_data[4:]
+        pos = 0
+
+        def register(code):
+            nonlocal pos
+            if code not in ("KC_NO", "KC_TRNS", -1) and code not in pos_map:
+                pos_map[code] = pos
+            pos += 1
+
+        for row in range(2):
+            for i in range(1, 6):
+                register(left[row][i])
+            for i in range(5, 0, -1):
+                register(right[row][i])
+
+        for i in range(1, 6):
+            register(left[2][i])
+        for i in range(5, 0, -1):
+            register(right[2][i])
+
+        for i in range(3, 6):
+            register(left[3][i])
+        for i in range(5, 2, -1):
+            register(right[3][i])
+
+    return pos_map
+
+
+def zmk_only_entry_for_piantor(totem_entry: dict) -> dict:
+    out = dict(totem_entry)
+    ovr = _ZMK_ONLY_COMBOS_PIANTOR_OVERRIDES.get(totem_entry["name"], {})
+    if ovr:
+        out.update(ovr)
+    else:
+        out["key-positions"] = translate_totem_to_piantor_key_positions(
+            totem_entry["key-positions"]
+        )
+    return out
+
+
+def format_combos_piantor(vil):
+    """Combos for Piantor vial key positions (5-col) + translated ZMK-only list."""
+    pos_map = build_vial_position_map_piantor(vil)
+
+    blocks = []
+    for idx, combo in enumerate(vil["combo"]):
+        output_key = combo[4]
+        if output_key == "KC_NO":
+            continue
+        trigger_keys = [k for k in combo[:4] if k != "KC_NO"]
+        if not trigger_keys:
+            continue
+        blocks.append(format_combo(idx, combo, pos_map))
+
+    for entry in _ZMK_ONLY_COMBOS:
+        blocks.append(format_zmk_only_combo(zmk_only_entry_for_piantor(entry)))
+
+    return "\n\n".join(blocks)
+
+
 def splice_combos(zmk_text, combos_content):
     """Replace the combos block content in the ZMK file."""
     pattern = re.compile(
@@ -656,6 +803,7 @@ def splice_combos(zmk_text, combos_content):
 def main():
     vil_path = Path(sys.argv[1]) if len(sys.argv) > 1 else VIL_DEFAULT
     zmk_path = Path(sys.argv[2]) if len(sys.argv) > 2 else ZMK_DEFAULT
+    piantor_path = Path(sys.argv[3]) if len(sys.argv) > 3 else PIANTOR_KEYMAP
 
     vil = json.loads(vil_path.read_text())
     zmk_text = zmk_path.read_text()
@@ -664,11 +812,13 @@ def main():
     MACROS.update(build_macros_map(vil.get("macro", []), zmk_text))
 
     layer_blocks = []
+    piantor_layer_blocks = []
     for i, name in enumerate(LAYER_NAMES):
         if i >= len(vil["layout"]):
             break
         keys = extract_layer(vil["layout"][i], i)
         layer_blocks.append(format_layer(name, keys))
+        piantor_layer_blocks.append(format_layer_piantor(name, keys))
 
     layers_text = "\n\n".join(layer_blocks)
     new_text = splice_keymap(zmk_text, layers_text)
@@ -677,12 +827,21 @@ def main():
     new_text = splice_combos(new_text, combos_content)
 
     zmk_path.write_text(new_text)
+
+    piantor_text = piantor_path.read_text()
+    MACROS.clear()
+    MACROS.update(build_macros_map(vil.get("macro", []), piantor_text))
+    piantor_layers_text = "\n\n".join(piantor_layer_blocks)
+    piantor_new = splice_keymap(piantor_text, piantor_layers_text)
+    piantor_new = splice_combos(piantor_new, format_combos_piantor(vil))
+    piantor_path.write_text(piantor_new)
+
     active_combos = sum(
         1 for c in vil["combo"] if c[4] != "KC_NO" and any(k != "KC_NO" for k in c[:4])
     )
     print(
         f"Synced {len(layer_blocks)} layers + {active_combos} combos"
-        f" from {vil_path.name} → {zmk_path.name}"
+        f" from {vil_path.name} → {zmk_path.name} and {piantor_path.name}"
     )
 
 

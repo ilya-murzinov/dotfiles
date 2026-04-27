@@ -16,6 +16,9 @@ from sync_keymap import (
     _vial_macro_text,
     COMBO_CONFIG,
     MACROS,
+    translate_totem_to_piantor_key_positions,
+    totem_38_to_piantor_36,
+    zmk_only_entry_for_piantor,
 )
 
 
@@ -572,6 +575,28 @@ class TestSpliceCombos(unittest.TestCase):
     def test_raises_when_no_combos_block(self):
         with self.assertRaises(ValueError):
             splice_combos("no combos here", "content")
+
+
+class TestPiantorTotemTranslation(unittest.TestCase):
+    def test_totem_to_piantor_bt_chords(self):
+        self.assertEqual(translate_totem_to_piantor_key_positions("<34 21>"), "<32 20>")
+        self.assertEqual(translate_totem_to_piantor_key_positions("<35 34>"), "<33 32>")
+        self.assertEqual(translate_totem_to_piantor_key_positions("<34 0 10 21>"), "<32 0 10 20>")
+
+    def test_bt_clear_override(self):
+        entry = zmk_only_entry_for_piantor(
+            {"name": "bt_clear", "bindings": "<&bt BT_CLR>", "key-positions": "<34 20>", "layers": "<6>"}
+        )
+        self.assertEqual(entry["key-positions"], "<32 35>")
+
+    def test_totem_38_to_piantor_36_drops_padding(self):
+        k = [f"{i}" for i in range(38)]
+        out = totem_38_to_piantor_36(k)
+        self.assertEqual(len(out), 36)
+        self.assertEqual(out[19], "19")
+        self.assertEqual(out[20], "21")
+        self.assertEqual(out[29], "30")
+        self.assertEqual(out[30], "32")
 
 
 if __name__ == "__main__":
