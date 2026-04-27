@@ -4,7 +4,7 @@
 //                                                        █   █  █  █   █  █  █   █  █  █   █
 //                                                         ▀▀▀   █   ▀▀▀   █   ▀▀▀   ▀   ▀▀▀
 //                                                               █      ▄▄▄█▄▄▄    █   █
-//                                                               ▀      █  █  █     █▄█
+/                                                               ▀      █  █  █     █▄█
 //                                                             ▀▀▀▀▀    █  █  █      ▀
 //                                                                      ▀  ▀  ▀
 //
@@ -20,12 +20,12 @@
 #include <dt-bindings/zmk/pointing.h>
 
 &mmv {
-    time-to-max-speed-ms = <750>;
+    time-to-max-speed-ms = <300>;
     acceleration-exponent = <1>;
 };
 
 &msc {
-    time-to-max-speed-ms = <1800>;
+    time-to-max-speed-ms = <500>;
     acceleration-exponent = <1>;
 };
 
