@@ -10,8 +10,8 @@
 //
 // ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 2000
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 30
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2800
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 45
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
@@ -21,13 +21,13 @@
 #include <dt-bindings/zmk/rgb.h>
 
 &mmv {
-    time-to-max-speed-ms = <300>;
-    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <120>;
+    acceleration-exponent = <2>;
 };
 
 &msc {
-    time-to-max-speed-ms = <300>;
-    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <120>;
+    acceleration-exponent = <2>;
 };
 
 &mt {
@@ -206,7 +206,7 @@
 
         language_switch {
             bindings = <&kp LC(SPACE)>;
-            key-positions = <38 39>;
+            key-positions = <39 38>;
             timeout-ms = <300>;
             layers = <0 2>;
         };
