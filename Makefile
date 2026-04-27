@@ -20,6 +20,7 @@ karabiner:
 uninstall:
 	@rm -f "$(DEST)/.vimrc" "$(DEST)/.vimrc_minimal" "$(DEST)/.ideavimrc" "$(DEST)/.tmux.conf" "$(DEST)/.zshrc" "$(DEST)/.aerospace.toml"
 	@rm -f "$(DEST)/.vim/core.vim" "$(DEST)/.vim/plugins.vim" "$(DEST)/.vim/mappings.vim" "$(DEST)/.vim/autocmds.vim"
+	@rm -f "$(DEST)/.vim/after/plugin/navigation.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	@rm -f "$(DEST)/.config/nvim/init.lua" "$(DEST)/.config/nvim/lua/plugins.lua" "$(DEST)/.config/nvim/lua/setup.lua"
 	@rm -f "$(DEST)/.config/kitty/kitty.conf" "$(DEST)/.config/kitty/catppuccin-mocha.conf"
@@ -50,6 +51,7 @@ link-vim:
 	ln -sf "$(REPO)/vim/.vim/autocmds.vim" "$(DEST)/.vim/autocmds.vim"
 	@rm -rf "$(DEST)/.vim/plugin-config"
 	ln -s "$(REPO)/vim/.vim/plugin-config" "$(DEST)/.vim/plugin-config"
+	ln -sf "$(REPO)/vim/.vim/after/plugin/navigation.vim" "$(DEST)/.vim/after/plugin/navigation.vim"
 	$(MAKE) install-plug
 
 link-nvim:
@@ -109,7 +111,11 @@ zmk-piantor-add: zmk-piantor-remote
 	git subtree add --prefix=zmk-piantor zmk-piantor-config main --squash
 
 zmk-piantor-pull: zmk-piantor-remote
-	git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash
+	@git merge --abort >/dev/null 2>&1 || true
+	@git rebase --abort >/dev/null 2>&1 || true
+	@git cherry-pick --abort >/dev/null 2>&1 || true
+	@git fetch zmk-piantor-config main
+	git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash -X theirs
 
 zmk-piantor-push: zmk-piantor-remote
 	git subtree push --prefix=zmk-piantor zmk-piantor-config main
