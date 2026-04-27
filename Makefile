@@ -114,13 +114,22 @@ zmk-piantor-pull: zmk-piantor-remote
 	@git merge --abort >/dev/null 2>&1 || true
 	@git rebase --abort >/dev/null 2>&1 || true
 	@git cherry-pick --abort >/dev/null 2>&1 || true
-	@git fetch zmk-piantor-config main
-	@git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash || ( \
+	@STASHED=0; \
+	if ! git diff --quiet || ! git diff --cached --quiet; then \
+		echo "working tree dirty, stashing changes before subtree pull"; \
+		git stash push -u -m "auto: zmk-piantor-pull" >/dev/null; \
+		STASHED=1; \
+	fi; \
+	git fetch zmk-piantor-config main; \
+	git subtree pull --prefix=zmk-piantor zmk-piantor-config main --squash || ( \
 		echo "subtree pull conflicted, taking upstream version for zmk-piantor/"; \
 		git checkout --theirs zmk-piantor; \
 		git add zmk-piantor; \
 		git commit --no-edit; \
-	)
+	); \
+	if [ $$STASHED -eq 1 ]; then \
+		echo "local changes are stashed (git stash list). Reapply manually: git stash pop"; \
+	fi
 
 zmk-piantor-push: zmk-piantor-remote
 	git subtree push --prefix=zmk-piantor zmk-piantor-config main
