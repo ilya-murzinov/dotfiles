@@ -18,6 +18,7 @@ if has('nvim')
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'obsidian-nvim/obsidian.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+  Plug 'stevearc/oil.nvim'
 endif
 
 call plug#end()

@@ -125,6 +125,16 @@ setup("nvim-treesitter.configs", function(ts)
   })
 end)
 
+-- oil.nvim
+setup("oil", function(oil)
+  oil.setup({
+    default_file_explorer = true,
+    view_options = { show_hidden = true },
+  })
+  vim.keymap.set("n", "-",          "<cmd>Oil<cr>", { desc = "Open parent directory" })
+  vim.keymap.set("n", "<leader>oo", "<cmd>Oil<cr>", { desc = "Open parent directory" })
+end)
+
 -- pq (SQL scratch buffer via Postico favorites)
 setup("pq", function(pq) pq.setup() end)
 
