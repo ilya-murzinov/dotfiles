@@ -130,6 +130,12 @@ setup("oil", function(oil)
   oil.setup({
     default_file_explorer = true,
     view_options = { show_hidden = true },
+    keymaps = {
+      ["<C-h>"] = { "<cmd>TmuxNavigateLeft<cr>",  mode = "n" },
+      ["<C-j>"] = { "<cmd>TmuxNavigateDown<cr>",  mode = "n" },
+      ["<C-k>"] = { "<cmd>TmuxNavigateUp<cr>",    mode = "n" },
+      ["<C-l>"] = { "<cmd>TmuxNavigateRight<cr>", mode = "n" },
+    },
   })
   vim.keymap.set("n", "-",          "<cmd>Oil<cr>", { desc = "Open parent directory" })
   vim.keymap.set("n", "<leader>oo", "<cmd>Oil<cr>", { desc = "Open parent directory" })
