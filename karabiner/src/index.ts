@@ -56,16 +56,13 @@ writeToProfile("Default", [
       map("l").to("right_arrow"),
       map("u").to("page_down"),
       map("i").to("page_up"),
-      map("s").to("up_arrow", "control"),
-      map("d").to("left_arrow", "control"),
-      map("f").to("right_arrow", "control"),
       map("c").to("open_bracket", ["command", "shift"]),
       map("v").to("close_bracket", ["command", "shift"]),
-      map("q").to("q", "option"),
-      map("w").to("w", "option"),
-      map("e").to("e", "option"),
-      map("r").to("r", "option"),
-      map("t").to("t", "option"),
+      map("a").to("a", "option"),
+      map("s").to("s", "option"),
+      map("d").to("d", "option"),
+      map("f").to("f", "option"),
+      map("g").to("g", "option"),
     )
     .tappingTerm(300)
     .description("Nav layer")
