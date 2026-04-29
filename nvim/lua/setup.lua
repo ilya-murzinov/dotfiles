@@ -129,7 +129,17 @@ end)
 setup("oil", function(oil)
   oil.setup({
     default_file_explorer = true,
-    view_options = { show_hidden = true },
+    columns = {
+      "icon",
+      { "mtime", format = "%Y-%m-%d %H:%M" },
+    },
+    view_options = {
+      show_hidden = true,
+      sort = {
+        { "mtime", "desc" },
+        { "name", "asc" },
+      },
+    },
     keymaps = {
       ["<C-h>"] = { "<cmd>TmuxNavigateLeft<cr>",  mode = "n" },
       ["<C-j>"] = { "<cmd>TmuxNavigateDown<cr>",  mode = "n" },
