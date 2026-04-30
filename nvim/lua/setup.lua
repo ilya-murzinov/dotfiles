@@ -148,6 +148,7 @@ setup("oil", function(oil)
     },
   })
   vim.keymap.set("n", "-",          "<cmd>Oil<cr>", { desc = "Open parent directory" })
+  vim.keymap.set("n", "<leader>e",  "<cmd>Oil<cr>", { desc = "Open parent directory" })
   vim.keymap.set("n", "<leader>oo", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 end)
 
