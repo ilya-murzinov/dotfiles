@@ -190,6 +190,27 @@ function! AddTag()
   endif
 endfunction
 
+function! ResizeMode()
+  echo "-- RESIZE -- (hjkl to resize, Esc to exit)"
+  while 1
+    let key = nr2char(getchar())
+    if key == 'h'
+      vertical resize -5
+    elseif key == 'l'
+      vertical resize +5
+    elseif key == 'k'
+      resize +5
+    elseif key == 'j'
+      resize -5
+    elseif key == "\e" || key == 'q'
+      break
+    endif
+    redraw
+    echo "-- RESIZE -- (hjkl to resize, Esc to exit)"
+  endwhile
+  echo ""
+endfunction
+
 function! SetTzOffset()
   let input = input('Current hour (0-23): ')
   if input == ''

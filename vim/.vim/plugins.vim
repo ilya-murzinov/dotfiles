@@ -11,6 +11,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-commentary'
+Plug 'ilia-murzinov/vim-practice'
 
 if has('nvim')
   Plug 'folke/which-key.nvim'
