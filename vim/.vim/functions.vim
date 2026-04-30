@@ -208,6 +208,7 @@ function! ResizeMode()
     redraw
     echo "-- RESIZE -- (hjkl to resize, Esc to exit)"
   endwhile
+  redraw
   echo ""
 endfunction
 
