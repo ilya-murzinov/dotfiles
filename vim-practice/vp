@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-case "$0" in
-  /*|*/*) dir="$(cd "$(dirname "$0")" && pwd -P)" ;;
-  *)      dir="$(dirname "$(command -v "$0")")" ;;
-esac
-exec nvim -S "$dir/practice.vim" "$@"

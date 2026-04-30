@@ -1,2 +1,0 @@
-const fullName =
-  firstName + ' ' + lastName;
