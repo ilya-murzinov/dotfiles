@@ -12,6 +12,7 @@ function! s:RestoreUndo() abort
     silent! execute 'rundo ' . s:undo_tmp
     call delete(s:undo_tmp)
     let s:undo_tmp = ''
+    set nomodified
   endif
 endfunction
 augroup preserve_undo_on_reload
@@ -22,7 +23,7 @@ augroup END
 
 augroup checktime_track_file
   autocmd!
-  autocmd FocusGained,BufEnter * if expand('%') != '' | checktime | endif
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if expand('%') != '' | checktime | endif
 augroup END
 
 augroup markdown_indent
@@ -32,5 +33,5 @@ augroup END
 
 augroup autosave
   autocmd!
-  autocmd InsertLeave,TextChanged,FocusLost * if expand('%') != '' && &buftype == '' && !&readonly && &modifiable | silent! write | endif
+  autocmd InsertLeave,TextChanged,FocusLost * if expand('%') != '' && &buftype == '' && !&readonly && &modifiable && &modified | silent! write | endif
 augroup END
