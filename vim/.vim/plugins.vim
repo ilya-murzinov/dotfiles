@@ -5,6 +5,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+Plug '~/projects/shader-monitor', { 'rtp': 'vim' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
