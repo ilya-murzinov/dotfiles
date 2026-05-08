@@ -36,17 +36,16 @@ Prefix: **C-s**
 | `C-s r c` | Reload config |
 | `C-s f` | Open new window in chosen project dir (fzf) |
 
-## Copy mode (vi keys)
+## Copy mode (vi)
+
+**Vi-style copy mode is built into tmux** (`mode-keys vi`). There is no separate plugin for it. **`tmux-yank`** only wires **y** / **Return** (and similar) to the **system clipboard**.
 
 | Keys | Action |
 |------|--------|
 | `C-s c` | Enter copy mode |
-| `v` | Begin selection |
-| `y` | Yank to clipboard (tmux-yank) |
-| `Escape` | Cancel |
-| `o` | Open selection (URL/path) |
-| `C-o` | Open in editor |
-| `S` | Web search |
+| `O` | Open path under cursor in nvim (`~/.local/bin/tmux-open-in-vim`) |
+
+See the full **copy-mode-vi** table: `tmux list-keys -T copy-mode-vi` or **tmux(1)** (copy-mode vi). **tmux-open** adds **`o` / `C-o` / `S`** for URLs/paths from copy mode.
 
 ## Plugins
 
