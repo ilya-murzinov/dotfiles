@@ -115,8 +115,7 @@ The full git workflow without leaving vim.
 | `Space gc` | Open Git status buffer (`:G`) |
 | `Space ga` | Git blame (`--date=short --abbrev=6`) |
 | `Space gf` | Git pull |
-| `Space gp` | Git push (in status buffer only) |
-| `Space gpf` | Git push --force-with-lease |
+| `Space gp` | Git push (in status buffer); on failure, optional `--force-with-lease` |
 
 ### Status buffer (`:G`)
 
