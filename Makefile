@@ -1,8 +1,8 @@
 # Dotfiles via GNU Stow (https://www.gnu.org/software/stow/). Package dirs mirror paths under $HOME.
-#   make install              # stow packages + brew helpers + vim-plug
+#   make install              # stow (+ bin/ → ~/bin), brew helpers, vim-plug, TPM
 #   make install DEST=/path
 #   make uninstall            # stow -D (remove symlinks Stow created)
-#   install-pre-stow        # removes legacy ln -sf targets so Stow can link (runs from install)
+#   install-pre-stow          # unlink legacy symlinks before Stow (never touches ~/.local/bin)
 #   make vim-minimal          # swap full Vim for minimal (mutually exclusive with vim package)
 #   make vim-full             # swap back to full Vim
 # Destructive: zmk-force-push / zmk-piantor-force-push require CONFIRM=yes
@@ -12,8 +12,8 @@ REPO := $(CURDIR)
 STOW := stow
 STOW_PACKAGES := aerospace bin kitty nvim starship tmux vim yazi zsh
 
-.PHONY: install uninstall install-stow install-pre-stow \
-	install-plug install-zsh-plugins install-starship install-yazi \
+.PHONY: install uninstall install-stow install-pre-stow install-plug install-tpm \
+	install-zsh-plugins install-starship install-yazi \
 	vim-minimal vim-full \
 	karabiner \
 	zmk-remote zmk-add zmk-pull zmk-push zmk-force-push zmk-sync \
@@ -21,8 +21,8 @@ STOW_PACKAGES := aerospace bin kitty nvim starship tmux vim yazi zsh
 
 install: install-stow install-zsh-plugins install-starship install-yazi install-pre-stow
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
-	cd "$(REPO)" && $(STOW) --target="$(DEST)" $(STOW_PACKAGES)
-	$(MAKE) install-plug
+	cd "$(REPO)" && $(STOW) --no-folding --target="$(DEST)" $(STOW_PACKAGES)
+	$(MAKE) install-plug install-tpm
 	@echo "Done. Stowed from $(REPO) into $(DEST)"
 
 uninstall:
@@ -42,22 +42,13 @@ install-stow:
 		fi; \
 	fi
 
-# Drop paths created by the old ln -sf Makefile so Stow can own them (symlinks removed;
-# regular files/dirs abort — move aside manually).
 install-pre-stow:
 	@home="$(DEST)"; \
-	rm_symlink_or_skip() { \
-		f="$$home/$$1"; \
-		if [ ! -e "$$f" ] && [ ! -L "$$f" ]; then return 0; fi; \
-		if [ -L "$$f" ]; then rm -f "$$f"; return 0; fi; \
-		echo "install-pre-stow: $$f exists but is not a symlink (won't overwrite). Rename or delete it, then rerun."; \
-		exit 1; \
-	}; \
 	for rel in \
 		.aerospace.toml \
-		.local/bin/proj-picker \
-		.local/bin/tmux-open-in-vim \
-		.local/bin/tmux-resize-all \
+		bin/proj-picker \
+		bin/tmux-open-in-vim \
+		bin/tmux-resize-all \
 		.config/kitty/kitty.conf \
 		.config/kitty/catppuccin-mocha.conf \
 		.config/nvim/init.lua \
@@ -76,10 +67,10 @@ install-pre-stow:
 		.vim/mappings.vim \
 		.vim/plugins.vim \
 		.vim/reload.vim \
-		.vim/plugin-config \
-		; do \
-		rm_symlink_or_skip "$$rel"; \
-	done
+		.vim/plugin-config; do \
+			f="$$home/$$rel"; \
+			[ ! -L "$$f" ] || rm "$$f"; \
+		done
 
 # --- Vim / Neovim -------------------------------------------------------------
 
@@ -90,14 +81,26 @@ install-plug:
 			https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; \
 	fi
 
+# Tmux Plugin Manager (used by tmux/.tmux.conf @plugin lines)
+install-tpm:
+	@if [ ! -f "$(DEST)/.tmux/plugins/tpm/tpm" ]; then \
+		if ! command -v git >/dev/null 2>&1; then \
+			echo "install-tpm: git not found; install git and retry."; \
+			exit 1; \
+		fi; \
+		mkdir -p "$(DEST)/.tmux/plugins"; \
+		GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/tmux-plugins/tpm \
+			"$(DEST)/.tmux/plugins/tpm"; \
+	fi
+
 # Minimal Vimrc shares core/*.vim via symlinks inside vim-minimal/.vim/
 vim-minimal: install-stow install-pre-stow install-plug
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim 2>/dev/null || true
-	cd "$(REPO)" && $(STOW) --target="$(DEST)" vim-minimal
+	cd "$(REPO)" && $(STOW) --no-folding --target="$(DEST)" vim-minimal
 
 vim-full: install-stow install-pre-stow install-plug
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
-	cd "$(REPO)" && $(STOW) --target="$(DEST)" vim
+	cd "$(REPO)" && $(STOW) --no-folding --target="$(DEST)" vim
 
 # --- Zsh / CLI tooling -------------------------------------------------------
 

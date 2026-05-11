@@ -1,6 +1,8 @@
-# --- PATH (early) ---
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="/usr/local/bin:$PATH"
+[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+[[ -d /opt/homebrew/bin ]] && PATH="/opt/homebrew/bin:$PATH"
+export PATH
 
 # --- Completion (Homebrew site-functions + zsh built-ins; no framework) ---
 typeset -U fpath FPATH
@@ -88,11 +90,13 @@ else
   bindkey '^[[A' history-beginning-search-backward
   bindkey '^[[B' history-beginning-search-forward
 fi
-
-# Init starship after zvm (ZVM_INIT_MODE=sourcing means source above is synchronous).
-# Kept outside zvm_after_init so re-sourcing ~/.zshrc also reinitialises correctly.
-(( $+commands[starship] )) && eval "$(starship init zsh)"
 unset _zb _zvm_file
+
+# Starship must run once after vi-mode binds; do not rely on STARSHIP_SHELL (some terminals
+# export it without running init → eval skipped → no PROMPT because starship is on PATH).
+if (( $+commands[starship] )) && (( ! ${+functions[prompt_starship_precmd]} )); then
+  eval "$(starship init zsh)"
+fi
 
 # --- fzf (after zsh-vi-mode so ^T / ^R / Alt+C stay bound in vicmd) ---
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

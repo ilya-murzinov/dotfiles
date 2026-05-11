@@ -16,7 +16,7 @@ Each top-level package directory mirrors paths under `$HOME` (for example `nvim/
 | `starship/` | `~/.config/starship.toml` |
 | `yazi/` | `~/.config/yazi/yazi.toml` |
 | `kitty/` | `~/.config/kitty/` |
-| `bin/` | `~/.local/bin/` scripts |
+| `bin/` | `~/bin/` (Stow) — separate from **`~/.local/bin`** (other tools’ installers use that) |
 | `aerospace/` | `~/.aerospace.toml` |
 | `karabiner/` | TypeScript source → `make karabiner` writes `~/.config/karabiner/karabiner.json` |
 | `vial/` | Vial keymaps (.vil) — load in [Vial](https://get.vial.today/) |
@@ -41,7 +41,7 @@ make install
 
 Override destination: `make install DEST=/other/home`. Remove Stowed symlinks: `make uninstall`.
 
-Switching from the old **`ln -sf`** Makefile: **`install-pre-stow`** deletes those symlink paths first so Stow can own them; plain files at the same paths abort until you rename them.
+**`install-pre-stow`** unlinks symlink leftovers where Stow manages a path (`~/.vimrc`, `~/.config/nvim`, …); it ignores plain files. **`~/.local/bin`** is never modified.
 
 **Minimal Vim instead of full:** `make vim-minimal`. Restore full Vim: `make vim-full` or `make install`.
 
