@@ -1,46 +1,48 @@
 # Dotfiles via GNU Stow (https://www.gnu.org/software/stow/). Package dirs mirror paths under $HOME.
-#   make install              # stow (+ bin/ → ~/bin), brew helpers, vim-plug, TPM
+#   make install              # stow, ~/bin → symlinks into repo bin/, brew, vim-plug, TPM, yazi flavor
 #   make install DEST=/path
 #   make uninstall            # stow -D (remove symlinks Stow created)
-#   install-pre-stow          # unlink legacy symlinks before Stow (never touches ~/.local/bin)
-#   make vim-minimal          # swap full Vim for minimal (mutually exclusive with vim package)
-#   make vim-full             # swap back to full Vim
 # Destructive: zmk-force-push / zmk-piantor-force-push require CONFIRM=yes
 
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 STOW := stow
-STOW_PACKAGES := aerospace bin kitty nvim starship tmux vim yazi zsh
+STOW_PACKAGES := aerospace kitty nvim starship tmux vim yazi zsh
 
-.PHONY: install uninstall install-stow install-pre-stow install-plug install-tpm \
-	install-zsh-plugins install-starship install-yazi \
+.PHONY: install uninstall install-stow install-bin install-brew install-pre-stow install-plug install-tpm install-yazi \
 	vim-minimal vim-full \
 	karabiner \
 	zmk-remote zmk-add zmk-pull zmk-push zmk-force-push zmk-sync \
 	zmk-piantor-remote zmk-piantor-add zmk-piantor-pull zmk-piantor-push zmk-piantor-force-push
 
-install: install-stow install-zsh-plugins install-starship install-yazi install-pre-stow
+install: install-stow install-brew install-pre-stow install-plug install-tpm install-yazi
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
+	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" bin 2>/dev/null || true
 	cd "$(REPO)" && $(STOW) --no-folding --target="$(DEST)" $(STOW_PACKAGES)
-	$(MAKE) install-plug install-tpm
+	$(MAKE) install-bin
 	@echo "Done. Stowed from $(REPO) into $(DEST)"
 
 uninstall:
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" $(STOW_PACKAGES) 2>/dev/null || true
+	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" bin 2>/dev/null || true
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
+	@rm -f "$(DEST)/bin/proj-picker" "$(DEST)/bin/tmux-open-in-vim" "$(DEST)/bin/tmux-resize-all"
 	@rm -f "$(DEST)/.vim/autoload/plug.vim"
 	@rm -f "$(DEST)/.p10k.zsh"
 	@echo "Unstowed packages; removed vim-plug bootstrap and stale p10k path if present."
 
 install-stow:
-	@if ! command -v $(STOW) >/dev/null 2>&1; then \
-		if command -v brew >/dev/null 2>&1; then \
-			brew list stow >/dev/null 2>&1 || brew install stow; \
-		else \
-			echo "GNU Stow not found. Install it (e.g. brew install stow) and retry."; \
-			exit 1; \
-		fi; \
-	fi
+	command -v $(STOW) >/dev/null || brew install stow
+
+# ~/bin/* → $(REPO)/bin/* (Stow cannot do this with a package dir named bin/.)
+install-bin:
+	mkdir -p "$(DEST)/bin"
+	ln -sf "$(REPO)/bin/proj-picker" "$(DEST)/bin/proj-picker"
+	ln -sf "$(REPO)/bin/tmux-open-in-vim" "$(DEST)/bin/tmux-open-in-vim"
+	ln -sf "$(REPO)/bin/tmux-resize-all" "$(DEST)/bin/tmux-resize-all"
+
+install-brew:
+	brew install fd fzf neovim ripgrep starship tmux yazi zoxide zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode
 
 install-pre-stow:
 	@home="$(DEST)"; \
@@ -83,15 +85,9 @@ install-plug:
 
 # Tmux Plugin Manager (used by tmux/.tmux.conf @plugin lines)
 install-tpm:
-	@if [ ! -f "$(DEST)/.tmux/plugins/tpm/tpm" ]; then \
-		if ! command -v git >/dev/null 2>&1; then \
-			echo "install-tpm: git not found; install git and retry."; \
-			exit 1; \
-		fi; \
-		mkdir -p "$(DEST)/.tmux/plugins"; \
-		GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/tmux-plugins/tpm \
-			"$(DEST)/.tmux/plugins/tpm"; \
-	fi
+	mkdir -p "$(DEST)/.tmux/plugins"
+	test -f "$(DEST)/.tmux/plugins/tpm/tpm" || \
+		GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/tmux-plugins/tpm "$(DEST)/.tmux/plugins/tpm"
 
 # Minimal Vimrc shares core/*.vim via symlinks inside vim-minimal/.vim/
 vim-minimal: install-stow install-pre-stow install-plug
@@ -102,43 +98,11 @@ vim-full: install-stow install-pre-stow install-plug
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
 	cd "$(REPO)" && $(STOW) --no-folding --target="$(DEST)" vim
 
-# --- Zsh / CLI tooling -------------------------------------------------------
-
-install-zsh-plugins:
-	@if command -v brew >/dev/null 2>&1; then \
-		missing=""; \
-		for p in zsh-vi-mode zsh-autosuggestions zsh-syntax-highlighting; do \
-			brew list "$$p" >/dev/null 2>&1 || missing="$$missing $$p"; \
-		done; \
-		if [ -n "$$missing" ]; then brew install $$missing; \
-		else echo "install-zsh-plugins: already present"; fi; \
-	else \
-		echo "install-zsh-plugins: no brew in PATH (install those formulae yourself)"; \
-	fi
-
-install-starship:
-	@if command -v brew >/dev/null 2>&1; then \
-		brew list starship >/dev/null 2>&1 || brew install starship; \
-	else \
-		echo "install-starship: no brew in PATH"; \
-	fi
-
 install-yazi:
-	@if command -v brew >/dev/null 2>&1; then \
-		missing=""; \
-		for p in yazi fd ripgrep; do brew list "$$p" >/dev/null 2>&1 || missing="$$missing $$p"; done; \
-		if [ -n "$$missing" ]; then brew install $$missing; \
-		else echo "install-yazi: brew formulae already present"; fi; \
-	else \
-		echo "install-yazi: no brew in PATH"; \
-	fi
-	@if [ ! -d "$(DEST)/.config/yazi/flavors/catppuccin-mocha.yazi" ]; then \
-		tmp=$$(mktemp -d); \
-		git clone --depth 1 https://github.com/yazi-rs/flavors.git "$$tmp/flavors" && \
-		mkdir -p "$(DEST)/.config/yazi/flavors" && \
-		cp -R "$$tmp/flavors/catppuccin-mocha.yazi" "$(DEST)/.config/yazi/flavors/" && \
-		rm -rf "$$tmp"; \
-	fi
+	mkdir -p "$(DEST)/.config/yazi/flavors"
+	test -d "$(DEST)/.config/yazi/flavors/catppuccin-mocha.yazi" || \
+		( t=$$(mktemp -d) && git clone --depth 1 https://github.com/yazi-rs/flavors.git $$t/f \
+		&& cp -R $$t/f/catppuccin-mocha.yazi "$(DEST)/.config/yazi/flavors/" && rm -rf $$t )
 
 # --- Karabiner ---------------------------------------------------------------
 

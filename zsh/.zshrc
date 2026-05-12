@@ -98,8 +98,9 @@ if (( $+commands[starship] )) && (( ! ${+functions[prompt_starship_precmd]} )); 
   eval "$(starship init zsh)"
 fi
 
-# --- fzf (after zsh-vi-mode so ^T / ^R / Alt+C stay bound in vicmd) ---
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+# fzf (after zsh-vi-mode)
+source "$(brew --prefix fzf)/shell/key-bindings.zsh"
+source "$(brew --prefix fzf)/shell/completion.zsh"
 
 alias nv='nvim'
 alias vn='nvim'
