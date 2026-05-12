@@ -38,7 +38,7 @@ nnoremap <leader>gf  :Git pull --rebase<CR>
 augroup fugitive_maps
   autocmd!
   autocmd FileType fugitive nnoremap <buffer><silent> <leader>gp :call <SID>GitPushUpstreamOrOfferForce()<CR>
-  autocmd FileType fugitive nnoremap <buffer><silent> <leader>sa  :Git add -A<CR>
+  autocmd FileType fugitive nnoremap <buffer><silent> sa  :Git add -A<CR>
   autocmd FileType fugitive nnoremap <buffer><silent> <leader>gb  :Git switch<space>
   autocmd FileType fugitive nnoremap <buffer><silent> <leader>gbn :Git switch -c<space>
 augroup END

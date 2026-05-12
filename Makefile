@@ -1,5 +1,5 @@
 # Dotfiles via GNU Stow (https://www.gnu.org/software/stow/). Package dirs mirror paths under $HOME.
-#   make install              # stow, ~/bin → symlinks into repo bin/, brew, vim-plug, TPM, yazi flavor
+#   make install              # stow (bin/ → ~/bin), brew, vim-plug, TPM, yazi flavor
 #   make install DEST=/path
 #   make uninstall            # stow -D (remove symlinks Stow created)
 # Destructive: zmk-force-push / zmk-piantor-force-push require CONFIRM=yes
@@ -7,9 +7,9 @@
 DEST ?= $(HOME)
 REPO := $(CURDIR)
 STOW := stow
-STOW_PACKAGES := aerospace kitty nvim starship tmux vim yazi zsh
+STOW_PACKAGES := aerospace bin kitty nvim starship tmux vim yazi zsh
 
-.PHONY: install uninstall install-stow install-bin install-brew install-pre-stow install-plug install-tpm install-yazi \
+.PHONY: install uninstall install-stow install-brew install-pre-stow install-plug install-tpm install-yazi \
 	vim-minimal vim-full \
 	karabiner \
 	zmk-remote zmk-add zmk-pull zmk-push zmk-force-push zmk-sync \
@@ -17,29 +17,16 @@ STOW_PACKAGES := aerospace kitty nvim starship tmux vim yazi zsh
 
 install: install-stow install-brew install-pre-stow install-plug install-tpm install-yazi
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
-	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" bin 2>/dev/null || true
 	cd "$(REPO)" && $(STOW) --no-folding --target="$(DEST)" $(STOW_PACKAGES)
-	$(MAKE) install-bin
 	@echo "Done. Stowed from $(REPO) into $(DEST)"
 
 uninstall:
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" $(STOW_PACKAGES) 2>/dev/null || true
-	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" bin 2>/dev/null || true
 	cd "$(REPO)" && $(STOW) -D --target="$(DEST)" vim-minimal 2>/dev/null || true
-	@rm -f "$(DEST)/bin/proj-picker" "$(DEST)/bin/tmux-open-in-vim" "$(DEST)/bin/tmux-resize-all"
 	@rm -f "$(DEST)/.vim/autoload/plug.vim"
-	@rm -f "$(DEST)/.p10k.zsh"
-	@echo "Unstowed packages; removed vim-plug bootstrap and stale p10k path if present."
 
 install-stow:
 	command -v $(STOW) >/dev/null || brew install stow
-
-# ~/bin/* → $(REPO)/bin/* (Stow cannot do this with a package dir named bin/.)
-install-bin:
-	mkdir -p "$(DEST)/bin"
-	ln -sf "$(REPO)/bin/proj-picker" "$(DEST)/bin/proj-picker"
-	ln -sf "$(REPO)/bin/tmux-open-in-vim" "$(DEST)/bin/tmux-open-in-vim"
-	ln -sf "$(REPO)/bin/tmux-resize-all" "$(DEST)/bin/tmux-resize-all"
 
 install-brew:
 	brew install fd fzf neovim ripgrep starship tmux yazi zoxide zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode

@@ -45,6 +45,12 @@ setup("telescope", function(ts)
   vim.keymap.set("n", "<leader>fb", b.buffers,     { desc = "Buffers" })
   vim.keymap.set("n", "<leader>sg", b.live_grep,   { desc = "Live grep" })
   vim.keymap.set("n", "<leader>sw", b.grep_string, { desc = "Grep word" })
+  vim.keymap.set("x", "<leader>sg", function()
+    vim.cmd([[noautocmd silent normal! "sy]])
+    local text = vim.trim(vim.fn.getreg("s"))
+    if text == "" then return end
+    b.grep_string({ search = text, use_regex = false })
+  end, { desc = "Grep selection (literal)" })
 end)
 
 -- diffview

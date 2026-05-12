@@ -122,6 +122,7 @@ The full git workflow without leaving vim.
 | Keys | Action |
 |------|--------|
 | `s` | Stage file / hunk under cursor |
+| `sa` | Stage everything (`git add -A`) |
 | `u` | Unstage |
 | `-` | Toggle stage/unstage |
 | `=` | Inline diff toggle |
